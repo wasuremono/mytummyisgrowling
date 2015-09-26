@@ -8,6 +8,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import comp4920.mytummyisgrowling.yelp.YelpAPI;
+
 public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -17,6 +19,18 @@ public class MapsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+
+        new Thread(new Runnable() {
+            public void run() {
+                String resultBody;
+                YelpAPI yelpApi = new YelpAPI();
+                resultBody = yelpApi.searchForBusinessesByLocation("japanese", "San Jose, CA");
+
+                System.out.println(resultBody);
+
+            }
+        }).start();
+
     }
 
     @Override
@@ -60,7 +74,7 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        // testing git commitsdfadsfasdfsdfs test 
+        // testing git commitsdfadsfasdfsdfs test
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
 }
