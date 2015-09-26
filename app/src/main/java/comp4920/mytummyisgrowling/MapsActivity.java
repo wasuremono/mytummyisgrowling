@@ -24,7 +24,7 @@ public class MapsActivity extends FragmentActivity {
             public void run() {
                 String resultBody;
                 YelpAPI yelpApi = new YelpAPI();
-                resultBody = yelpApi.searchForBusinessesByLocation("japanese", "San Jose, CA");
+                resultBody = yelpApi.searchForBusinessesByLocation("Japanese", "Sydney, Australia");
 
                 System.out.println(resultBody);
 
