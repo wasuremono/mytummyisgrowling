@@ -24,4 +24,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.google.android.gms:play-services:7.8.0'
     compile files('libs/jcommander-1.35.jar')
+    compile files('libs/gson-2.3.1.jar')
+    compile files('src/main/libs/gson-2.3.1.jar')
+    compile files('libs/gson-1.6.jar')
 }
