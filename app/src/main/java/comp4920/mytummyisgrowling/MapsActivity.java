@@ -20,17 +20,6 @@ public class MapsActivity extends FragmentActivity {
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
 
-        new Thread(new Runnable() {
-            public void run() {
-                String resultBody;
-                YelpAPI yelpApi = new YelpAPI();
-                resultBody = yelpApi.searchForBusinessesByLocation("Japanese", "Sydney, Australia");
-
-                System.out.println(resultBody);
-
-            }
-        }).start();
-
     }
 
     @Override
