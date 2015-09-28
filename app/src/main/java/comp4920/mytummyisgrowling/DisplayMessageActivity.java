@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 public class DisplayMessageActivity extends AppCompatActivity {
 
     private String searchResult;
+    private StringBuffer concatResult;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,71 +51,131 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 YelpAPI yelpApi = new YelpAPI();
                 resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
 
+                System.out.println("\033[0;1m" + "Result Body");
                 System.out.println(resultBody);
 
                 searchResult = resultBody;
                 Gson gson = new Gson();
                 SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
 
-                System.out.println("JSON");
-                System.out.println("Region");
-                System.out.println("Span: " + response.getRegion().getSpan().getLatitude_delta());
-                System.out.println("Span: " + response.getRegion().getSpan().getLongitude_delta());
-                System.out.println("Center: " + response.getRegion().getCenter().getLatitude());
-                System.out.println("Center: " + response.getRegion().getCenter().getLongitude());
+                concatResult = new StringBuffer("GSON RESULTS\n");
+                concatResult.append("JSON\n");
+                concatResult.append("Region\n");
+                concatResult.append("Span: \n" + response.getRegion().getSpan().getLatitude_delta() + "\n");
+                concatResult.append("Span: \n" + response.getRegion().getSpan().getLongitude_delta() + "\n");
+                concatResult.append("Center: \n" + response.getRegion().getCenter().getLatitude() + "\n");
+                concatResult.append("Center: \n" + response.getRegion().getCenter().getLongitude() + "\n");
 
-                System.out.println("Total: " + response.getTotal());
+                concatResult.append("Total: \n" + response.getTotal() + "\n");
 
-                for(Business business : response.getBusinesses()) {
-                    System.out.println("==============================");
+                //for(Business business : response.getBusinesses()) {
+                for(int i = 0; i < response.getBusinesses().size(); i++) {
+                    Business business = response.getBusinesses().get(i);
+                    concatResult.append("==============================" + "\n");
+                    concatResult.append(" =====Business "  + i + " ====" + "\n");
+                    concatResult.append("is_claimed: \n" + business.is_claimed() + "\n");
+                    concatResult.append("Rating: \n" + business.getRating() + "\n");
+                    concatResult.append("Mobile URL: \n" + business.getMobile_url() + "\n");
+                    concatResult.append("Rating IMG URL: \n" + business.getRating_img_url() + "\n");
+                    concatResult.append("Review Count: \n" + business.getReview_count() + "\n");
+                    concatResult.append("Name: \n" + business.getName() + "\n");
+                    concatResult.append("Rating IMG URL Small: \n" + business.getRating_img_url_small() + "\n");
+                    concatResult.append("URL: \n" + business.getUrl() + "\n");
+                    concatResult.append("Snippet Text: \n" + business.getSnippet_text() + "\n");
+                    concatResult.append("Phone: \n" + business.getPhone() + "\n");
 
-                    System.out.println(" =====Business Info ====");
-                    System.out.println("is_claimed: " + business.is_claimed());
-                    System.out.println("Rating: " + business.getRating());
-                    System.out.println("Mobile URL: " + business.getMobile_url());
-                    System.out.println("Rating IMG URL: " + business.getRating_img_url());
-                    System.out.println("Review Count: " + business.getReview_count());
-                    System.out.println("Name: " + business.getName());
-                    System.out.println("Rating IMG URL Small: " + business.getRating_img_url_small());
-                    System.out.println("URL: " + business.getUrl());
-                    System.out.println("Snippet Text: " + business.getSnippet_text());
-                    System.out.println("Phone: " + business.getPhone());
-
-                    System.out.println("=====Location ====");
-                    System.out.println("City: " + business.getLocation().getCity());
-                    System.out.println("Display Address: ");
+                    concatResult.append("=====Location ====" + "\n");
+                    concatResult.append("City: \n" + business.getLocation().getCity() + "\n");
+                    concatResult.append("Display Address: " + "\n");
                     for (String dispAdd : business.getLocation().getDisplay_address()) {
-                        System.out.println(dispAdd);
+                        concatResult.append(dispAdd + "\n");
                     }
-                    System.out.println("Geo Accuracy: " + business.getLocation().getGeo_accuracy());
-                    //System.out.println("Neighbourhoods: ");
+                    concatResult.append("Geo Accuracy: \n" + business.getLocation().getGeo_accuracy() + "\n");
+                    //concatResult.append("Neighbourhoods: ");
                     //for (String n : business.getLocation().getNeighbourhods()) {
-                    //     System.out.println(n);
+                    //     concatResult.append(n);
                     //}
-                    System.out.println("Postal Code: " + business.getLocation().getPostal_code());
-                    System.out.println("Country Code: " + business.getLocation().getCountry_code());
-                    System.out.println("Address: ");
-                    for(String address : business.getLocation().getAddress()) {
-                        System.out.println(address);
+                    concatResult.append("Postal Code: \n" + business.getLocation().getPostal_code() + "\n");
+                    concatResult.append("Country Code: \n" + business.getLocation().getCountry_code() + "\n");
+                    concatResult.append("Address: " + "\n");
+                    for (String address : business.getLocation().getAddress()) {
+                        concatResult.append(address + "\n");
                     }
 
-                    //System.out.println("===== Coordinate ====");
-                    //System.out.println("Latitude: " + business.getLocation().getCoordinate().getLatitude());
-                    //System.out.println("Longitude: " + business.getLocation().getCoordinate().getLongitude());
+                    //concatResult.append("===== Coordinate ====" + "\n");
+                    //concatResult.append("Latitude: " + business.getLocation().getCoordinate().getLatitude() + "\n");
+                    //concatResult.append("Longitude: " + business.getLocation().getCoordinate().getLongitude() + "\n");
+
+                    concatResult.append("===== Other ====" + "\n");
+                    concatResult.append("Display Phone: \n" + business.getDisplay_phone() + "\n");
+                    concatResult.append("Rating IMG URL Large: \n" + business.getRating_img_url_large() + "\n");
+                    concatResult.append("is_closed: \n" + business.is_closed() + "\n");
 
 
-                    System.out.println("===== Other ====");
-                    System.out.println("Display Phone: " + business.getDisplay_phone());
-                    System.out.println("Rating IMG URL Large: " + business.getRating_img_url_large());
-                    System.out.println("is_closed: " + business.is_closed());
                 }
+
+
+
+
+//                System.out.println("Region");
+//                System.out.println("Span: " + response.getRegion().getSpan().getLatitude_delta());
+//                System.out.println("Span: " + response.getRegion().getSpan().getLongitude_delta());
+//                System.out.println("Center: " + response.getRegion().getCenter().getLatitude());
+//                System.out.println("Center: " + response.getRegion().getCenter().getLongitude());
+//
+//                System.out.println("Total: " + response.getTotal());
+//
+//                for(Business business : response.getBusinesses()) {
+//                    System.out.println("==============================");
+//
+//                    System.out.println(" =====Business Info ====");
+//                    System.out.println("is_claimed: " + business.is_claimed());
+//                    System.out.println("Rating: " + business.getRating());
+//                    System.out.println("Mobile URL: " + business.getMobile_url());
+//                    System.out.println("Rating IMG URL: " + business.getRating_img_url());
+//                    System.out.println("Review Count: " + business.getReview_count());
+//                    System.out.println("Name: " + business.getName());
+//                    System.out.println("Rating IMG URL Small: " + business.getRating_img_url_small());
+//                    System.out.println("URL: " + business.getUrl());
+//                    System.out.println("Snippet Text: " + business.getSnippet_text());
+//                    System.out.println("Phone: " + business.getPhone());
+//
+//                    System.out.println("=====Location ====");
+//                    System.out.println("City: " + business.getLocation().getCity());
+//                    System.out.println("Display Address: ");
+//                    for (String dispAdd : business.getLocation().getDisplay_address()) {
+//                        System.out.println(dispAdd);
+//                    }
+//                    System.out.println("Geo Accuracy: " + business.getLocation().getGeo_accuracy());
+//                    //System.out.println("Neighbourhoods: ");
+//                    //for (String n : business.getLocation().getNeighbourhods()) {
+//                    //     System.out.println(n);
+//                    //}
+//                    System.out.println("Postal Code: " + business.getLocation().getPostal_code());
+//                    System.out.println("Country Code: " + business.getLocation().getCountry_code());
+//                    System.out.println("Address: ");
+//                    for(String address : business.getLocation().getAddress()) {
+//                        System.out.println(address);
+//                    }
+//
+//                    //System.out.println("===== Coordinate ====");
+//                    //System.out.println("Latitude: " + business.getLocation().getCoordinate().getLatitude());
+//                    //System.out.println("Longitude: " + business.getLocation().getCoordinate().getLongitude());
+//
+//
+//                    System.out.println("===== Other ====");
+//                    System.out.println("Display Phone: " + business.getDisplay_phone());
+//                    System.out.println("Rating IMG URL Large: " + business.getRating_img_url_large());
+//                    System.out.println("is_closed: " + business.is_closed());
+//                }
 
 
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        textView.setText(searchResult);
+                        //textView.setText(searchResult);
+                        textView.setText(concatResult);
                         setContentView(textView);
                     }
                 });
