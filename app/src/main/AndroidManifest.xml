@@ -41,7 +41,7 @@
         <activity
             android:name=".ResultListActivity"
             android:label="@string/title_activity_result_list"
-            android:launchMode= "singleTop"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -54,6 +54,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.ResultListActivity" />
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register" >
         </activity>
     </application>
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="register_username_min_char_limit">6</integer>
+    <integer name="register_username_max_char_limit">30</integer>
+    <integer name="register_password_min_char_limit">8</integer>
+</resources>
