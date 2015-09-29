@@ -162,7 +162,4 @@ public class Business {
         this.location = location;
     }
 
-
-
-
 }
