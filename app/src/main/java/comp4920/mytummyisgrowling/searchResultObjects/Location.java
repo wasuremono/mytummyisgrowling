@@ -1,11 +1,12 @@
 package comp4920.mytummyisgrowling.searchResultObjects;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Andy Lee on 27/09/2015.
  */
-public class Location {
+public class Location implements Serializable {
 
     private List<String> address;
     private String city;

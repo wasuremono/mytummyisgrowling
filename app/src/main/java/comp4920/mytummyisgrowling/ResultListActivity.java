@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -44,6 +45,7 @@ public class ResultListActivity extends AppCompatActivity {
     private ArrayList<Business> businessList;
 
     private ResultListAdapter resultListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +98,23 @@ public class ResultListActivity extends AppCompatActivity {
                         ListView listView = (ListView) findViewById(R.id.resultListView);
                         listView.setAdapter(resultListAdapter);
 
-                       // listView.setOnItemClickListener(new OnItemC);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                System.out.println("YOU CLICKED " + resultListAdapter.businessList.get(position).getName());
+                                Business clickedBusiness = (resultListAdapter.businessList.get(position));
+                            //    Business clickedBusiness = businessList.get(position);
+                                Intent sendIntent = new Intent(getResultListActivity(), ResultDetailsActivity.class);
+                                sendIntent.putExtra("sentIntent", clickedBusiness);
+                                startActivity(sendIntent);
+
+
+//                                Intent clickedIntent = new Intent(getResultListActivity(), ResultDetailsActivity.class);
+//                                clickedIntent.putExtra("clickedIntent", clickedBusiness);
+//                                startActivity(clickedIntent);
+
+                            }
+                        });
 
                     }
                 });

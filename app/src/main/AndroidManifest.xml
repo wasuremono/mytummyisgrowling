@@ -46,6 +46,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.MainActivity" />
         </activity>
+        <activity
+            android:name=".ResultDetailsActivity"
+            android:label="@string/title_activity_result_details"
+            android:parentActivityName=".ResultListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.ResultListActivity" />
+        </activity>
     </application>
 
 </manifest>

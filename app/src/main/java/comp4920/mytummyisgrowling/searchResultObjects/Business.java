@@ -1,11 +1,12 @@
 package comp4920.mytummyisgrowling.searchResultObjects;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Andy Lee on 27/09/2015.
  */
-public class Business {
+public class Business implements Serializable {
 
     private boolean is_claimed;
     private int rating;

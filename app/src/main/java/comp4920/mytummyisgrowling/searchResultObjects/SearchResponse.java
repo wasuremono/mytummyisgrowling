@@ -4,10 +4,11 @@ package comp4920.mytummyisgrowling.searchResultObjects;
  * Created by Andy Lee on 27/09/2015.
  */
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class SearchResponse {
+public class SearchResponse implements Serializable {
 
     private Region region;
     private List<Business> businesses;

@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="comp4920.mytummyisgrowling.ResultDetailsActivity"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/resultDetailsImage"
+        android:layout_weight="0.05"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:id="@+id/resultDetailsName"
+        android:layout_weight="0.17" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Address"
+        android:id="@+id/resultDetailsAddress"
+        android:layout_weight="0.16" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Other things"
+        android:id="@+id/resultDetailsOther"
+        android:layout_weight="0.22" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resultsRatingBar"
+        android:layout_weight="0.05" />
+</LinearLayout>

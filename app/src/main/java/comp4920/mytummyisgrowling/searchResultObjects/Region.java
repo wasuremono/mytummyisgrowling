@@ -1,9 +1,11 @@
 package comp4920.mytummyisgrowling.searchResultObjects;
 
+import java.io.Serializable;
+
 /**
  * Created by Andy Lee on 27/09/2015.
  */
-public class Region {
+public class Region implements Serializable {
 
     private Span span;
     private Center center;
