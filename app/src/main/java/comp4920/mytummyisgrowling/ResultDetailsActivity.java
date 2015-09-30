@@ -40,7 +40,7 @@ public class ResultDetailsActivity extends AppCompatActivity {
         detailsName.setText(receivedBusiness.getName());
 
         StringBuffer addressString = new StringBuffer("");
-        for(String string : receivedBusiness.getLocation().getAddress()) {
+        for(String string : receivedBusiness.getLocation().getDisplay_address()) {
             addressString.append(string + "\n");
         }
 

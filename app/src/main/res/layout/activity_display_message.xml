@@ -11,7 +11,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:scrollbars="vertical"
-        android:id="@+id/textView"
+        android:id="@+id/mainCuisineTextView"
         android:layout_weight="0.05"/>
 
     <Button

@@ -57,6 +57,7 @@ public class ResultListActivity extends AppCompatActivity {
         // Get the message from the intent
         Intent intent = getIntent();
         final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        final String latLong = intent.getStringExtra("currLatLong");
 
         setTitle("ListView for " + message);
 
@@ -71,8 +72,8 @@ public class ResultListActivity extends AppCompatActivity {
                 String searchCuisine = message;
 
                 YelpAPI yelpApi = new YelpAPI();
-                resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-
+               //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
+                resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, latLong);
                 System.out.println("Result Body");
                 System.out.println(resultBody);
 
@@ -209,7 +210,7 @@ public class ResultListActivity extends AppCompatActivity {
             restaurantName.setText(business.getName());
 
             StringBuffer addressString = new StringBuffer("");
-            for(String string : business.getLocation().getAddress()) {
+            for(String string : business.getLocation().getDisplay_address()) {
                 addressString.append(string + "\n");
                 System.out.println(string);
             }

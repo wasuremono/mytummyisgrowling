@@ -88,6 +88,14 @@ public class YelpAPI {
     return sendRequestAndGetResponse(request);
   }
 
+  public String searchForBusinessesByLatLong(String searchCuisine, String latLong) {
+    OAuthRequest request = createOAuthRequest(SEARCH_PATH);
+    request.addQuerystringParameter("term", searchCuisine);
+    request.addQuerystringParameter("ll", latLong);
+    request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+    return sendRequestAndGetResponse(request);
+  }
+
   /**
    * Creates and sends a request to the Business API by business ID.
    * <p>
@@ -151,14 +159,16 @@ public class YelpAPI {
     JSONObject firstBusiness = (JSONObject) businesses.get(0);
     String firstBusinessID = firstBusiness.get("id").toString();
     System.out.println(String.format(
-        "%s businesses found, querying business info for the top result \"%s\" ...",
-        businesses.size(), firstBusinessID));
+            "%s businesses found, querying business info for the top result \"%s\" ...",
+            businesses.size(), firstBusinessID));
 
     // Select the first business and display business details
     String businessResponseJSON = yelpApi.searchByBusinessId(firstBusinessID.toString());
     System.out.println(String.format("Result for business \"%s\" found:", firstBusinessID));
     System.out.println(businessResponseJSON);
   }
+
+
 
   /**
    * Command-line interface for the sample Yelp API runner.
