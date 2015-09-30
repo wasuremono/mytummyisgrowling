@@ -7,8 +7,8 @@
 
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="69dp"
+        android:layout_height="69dp"
         android:id="@+id/resultListImage"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp" />
@@ -20,7 +20,7 @@
         android:layout_marginLeft="10dp"
         android:weightSum="1"
         android:layout_marginRight="5dp"
-        android:layout_weight="0.29">
+        android:layout_weight="1.21">
 
 
         <TextView

@@ -1,4 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+<LinearLayout
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
@@ -38,8 +45,17 @@
         android:layout_weight="0.22" />
 
     <RatingBar
-        android:layout_width="wrap_content"
+        android:layout_width="251dp"
         android:layout_height="wrap_content"
-        android:id="@+id/resultsRatingBar"
-        android:layout_weight="0.05" />
+        android:id="@+id/resultsRatingBar" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="165dp"
+        android:id="@+id/resultsStaticMapButton"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
+
+</ScrollView>
