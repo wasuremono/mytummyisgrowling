@@ -13,48 +13,129 @@
     tools:context="comp4920.mytummyisgrowling.ResultDetailsActivity"
     android:weightSum="1">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/resultDetailsImage"
-        android:layout_weight="0.05"
-        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="143dp">
+
+        <ImageView
+            android:layout_width="139dp"
+            android:layout_height="match_parent"
+            android:id="@+id/resultDetailsImage"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="3dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:layout_marginRight="3dp">
+
+            <TextView
+                android:layout_width="212dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Name"
+                android:id="@+id/resultDetailsName"
+                android:layout_marginLeft="5dp"
+                android:textStyle="bold"
+                android:layout_weight="0.23" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Location"
+                android:id="@+id/resultDetailsLocation"
+                android:layout_weight="0.21"
+                android:layout_marginLeft="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Phone Number"
+                android:id="@+id/resultDetailsPhoneNum"
+                android:layout_marginLeft="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Rating"
+                android:id="@+id/resultDetailsRating"
+                android:layout_weight="0.41"
+                android:layout_marginLeft="5dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:id="@+id/addressTextView"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Name"
-        android:id="@+id/resultDetailsName"
-        android:layout_weight="0.17" />
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="210dp"
+            android:layout_height="93dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Address"
+            android:id="@+id/resultDetailsAddress"
+            android:layout_weight="1.08"
+            android:layout_gravity="top" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="Get Directions"
+            android:id="@+id/resultDetailsDirButton"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_vertical|right" />
+    </LinearLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Address"
-        android:id="@+id/resultDetailsAddress"
-        android:layout_weight="0.16" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Other things"
-        android:id="@+id/resultDetailsOther"
-        android:layout_weight="0.22" />
-
-    <RatingBar
-        android:layout_width="251dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/resultsRatingBar" />
+        android:text="Google Maps"
+        android:id="@+id/textView2"
+        android:textStyle="bold" />
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="165dp"
         android:id="@+id/resultsStaticMapButton"
         android:scaleType="centerCrop"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Reviews"
+        android:id="@+id/textView"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Other things"
+        android:id="@+id/resultDetailsOther" />
 
 </LinearLayout>
 

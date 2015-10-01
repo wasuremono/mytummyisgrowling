@@ -47,25 +47,29 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
         ImageView detailsImage = (ImageView) this.findViewById(R.id.resultDetailsImage);
         TextView detailsName = (TextView) this.findViewById(R.id.resultDetailsName);
+        TextView detailsLocation = (TextView) this.findViewById(R.id.resultDetailsLocation);
+        TextView detailsRating = (TextView) this.findViewById(R.id.resultDetailsRating);
+        TextView detailsPhone = (TextView) this.findViewById(R.id.resultDetailsPhoneNum);
+
         TextView detailsAddress = (TextView) this.findViewById(R.id.resultDetailsAddress);
         TextView detailsOther = (TextView) this.findViewById(R.id.resultDetailsOther);
-        RatingBar detailsRatingBar = (RatingBar) this.findViewById(R.id.resultsRatingBar);
 
         String imageURL = receivedBusiness.getImage_url();
-
         Picasso.with(this).load(imageURL).into(detailsImage);
+
         detailsName.setText(receivedBusiness.getName());
+        detailsLocation.setText(receivedBusiness.getLocation().getCity() + ", " +
+                                receivedBusiness.getLocation().getState_code());
+        detailsRating.setText("Rating:  " + receivedBusiness.getRating());
+        detailsPhone.setText("Phone:   " + receivedBusiness.getDisplay_phone());
 
         StringBuffer addressString = new StringBuffer("");
         for(String string : receivedBusiness.getLocation().getDisplay_address()) {
             addressString.append(string + "\n");
         }
-
         detailsAddress.setText(addressString);
 
         detailsOther.setText(receivedBusiness.getSnippet_text());
-
-        detailsRatingBar.setNumStars(receivedBusiness.getRating());
 
         System.out.println("The business ID is: " + receivedBusiness.getId());
 
@@ -79,8 +83,7 @@ public class ResultDetailsActivity extends AppCompatActivity {
             public boolean onPreDraw() {
                 finalHeight = iv.getMeasuredHeight();
                 finalWidth = iv.getMeasuredWidth();
-                Log.e("hilength", "Height: " + finalHeight + " Width: " + finalWidth);
-
+                // Log.e("hilength", "Height: " + finalHeight + " Width: " + finalWidth);
 
 
                 //  detailsStaticMap = (ImageButton) this.findViewById(R.id.resultsStaticMapButton);
@@ -89,11 +92,6 @@ public class ResultDetailsActivity extends AppCompatActivity {
                 mapURLBuffer.append(staticLatitude + "," + staticLongitude);
                 mapURLBuffer.append("&zoom=18");
                 mapURLBuffer.append("&size=");
-
-
-
-                System.out.println("WIDTH OF MAP BUTTON IS: " + mapWidth);
-                System.out.println("HEIGHT OF MAP BUTTON IS: " + mapHeight);
 
                 mapURLBuffer.append(finalWidth + "x" + finalHeight);
 
@@ -105,7 +103,7 @@ public class ResultDetailsActivity extends AppCompatActivity {
                 Picasso.with(getResultDetailsActivity()).load(mapURLBuffer.toString()).into(detailsStaticMapImageView);
 
 
-                System.out.println("StringBuffer URL IS: " + mapURLBuffer);
+               // System.out.println("StringBuffer URL IS: " + mapURLBuffer);
 
                 return true;
             }
