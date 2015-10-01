@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,6 +34,8 @@ public class ResultDetailsActivity extends AppCompatActivity {
     final private double staticLatitude = 0;
     final private double staticLongitude = 0;
 
+    private String placeName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,8 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
         Business receivedBusiness = (Business) receivedIntent.getSerializableExtra("sentIntent");
         System.out.println("got the intent business");
+
+        placeName = receivedBusiness.getName();
 
         ImageView detailsImage = (ImageView) this.findViewById(R.id.resultDetailsImage);
         TextView detailsName = (TextView) this.findViewById(R.id.resultDetailsName);
@@ -78,6 +84,37 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
 
         final ImageView iv=(ImageView)findViewById(R.id.resultsStaticMapButton);
+        iv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                switch (arg1.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        System.out.println("ResultDetaislACtivity: ACTION DOWN ON MAP");
+
+                        String sendName = placeName;
+                        String sendLat = Double.toString(staticLatitude);
+                        String sendLong = Double.toString(staticLongitude);
+
+                        Intent latLongToMap = new Intent(getResultDetailsActivity(), MapsActivity.class);
+                        latLongToMap.putExtra("sentLat", sendLat);
+                        latLongToMap.putExtra("sentLong", sendLong);
+                        latLongToMap.putExtra("sentPlaceName", sendName);
+                        startActivity(latLongToMap);
+
+
+                        break;
+                    }
+                    case MotionEvent.ACTION_CANCEL:{
+                        System.out.println("ResultDetaislACtivity: ACTION CANCEL ON MAP");
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
+
+
+
         final ViewTreeObserver vto = iv.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {

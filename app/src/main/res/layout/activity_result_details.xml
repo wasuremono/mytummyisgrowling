@@ -30,8 +30,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="1"
-            android:layout_marginRight="3dp">
+            android:weightSum="1">
 
             <TextView
                 android:layout_width="212dp"
