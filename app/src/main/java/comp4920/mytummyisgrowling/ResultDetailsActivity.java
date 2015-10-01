@@ -84,36 +84,23 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
 
         final ImageView iv=(ImageView)findViewById(R.id.resultsStaticMapButton);
-        iv.setOnTouchListener(new View.OnTouchListener() {
+//
+        iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                switch (arg1.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        System.out.println("ResultDetaislACtivity: ACTION DOWN ON MAP");
+            public void onClick(View v) {
+                System.out.println("ResultDetaislACtivity: ACTION DOWN ON MAP");
 
-                        String sendName = placeName;
-                        String sendLat = Double.toString(staticLatitude);
-                        String sendLong = Double.toString(staticLongitude);
+                String sendName = placeName;
+                String sendLat = Double.toString(staticLatitude);
+                String sendLong = Double.toString(staticLongitude);
 
-                        Intent latLongToMap = new Intent(getResultDetailsActivity(), MapsActivity.class);
-                        latLongToMap.putExtra("sentLat", sendLat);
-                        latLongToMap.putExtra("sentLong", sendLong);
-                        latLongToMap.putExtra("sentPlaceName", sendName);
-                        startActivity(latLongToMap);
-
-
-                        break;
-                    }
-                    case MotionEvent.ACTION_CANCEL:{
-                        System.out.println("ResultDetaislACtivity: ACTION CANCEL ON MAP");
-                        break;
-                    }
-                }
-                return true;
+                Intent latLongToMap = new Intent(getResultDetailsActivity(), MapsActivity.class);
+                latLongToMap.putExtra("sentLat", sendLat);
+                latLongToMap.putExtra("sentLong", sendLong);
+                latLongToMap.putExtra("sentPlaceName", sendName);
+                startActivity(latLongToMap);
             }
         });
-
-
 
         final ViewTreeObserver vto = iv.getViewTreeObserver();
         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {

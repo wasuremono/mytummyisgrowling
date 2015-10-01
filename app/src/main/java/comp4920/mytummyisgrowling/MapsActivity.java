@@ -41,8 +41,8 @@ public class MapsActivity extends FragmentActivity {
         POSITION =
             new CameraPosition.Builder().target(NEWARK)
                     .zoom(17)
-                    .bearing(320)
-                    .tilt(30)
+                //    .bearing(320)
+                   // .tilt(30)
                     .build();
 
         System.out.println("MAP RECIEVED LAT: " + latitude);
