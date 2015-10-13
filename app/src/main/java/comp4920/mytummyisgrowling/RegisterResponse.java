@@ -2,7 +2,7 @@ package comp4920.mytummyisgrowling;
 
 import java.io.Serializable;
 
-public class registerResponse implements Serializable {
+public class RegisterResponse implements Serializable {
 
     private boolean error;
     private int id;
