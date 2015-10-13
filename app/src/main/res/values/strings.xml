@@ -25,5 +25,6 @@
     <string name="register_confirm_password">Confirm Password</string>
     <string name="register_credentials_next_button">Next</string>
     <string name="title_activity_maps_from_list">MapsFromListActivity</string>
+    <string name="title_activity_account_settings">AccountSettingsActivity</string>
 </resources>
 

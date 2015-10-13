@@ -77,6 +77,14 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity
+            android:name=".AccountSettingsActivity"
+            android:label="@string/title_activity_account_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
