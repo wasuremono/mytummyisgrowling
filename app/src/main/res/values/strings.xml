@@ -24,5 +24,6 @@
     <string name="register_password_mismatch">These passwords do not match.</string>
     <string name="register_confirm_password">Confirm Password</string>
     <string name="register_credentials_next_button">Next</string>
+    <string name="title_activity_maps_from_list">MapsFromListActivity</string>
 </resources>
 

@@ -85,6 +85,8 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
         final ImageView iv=(ImageView)findViewById(R.id.resultsStaticMapButton);
 //
+
+
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +110,8 @@ public class ResultDetailsActivity extends AppCompatActivity {
                 finalHeight = iv.getMeasuredHeight();
                 finalWidth = iv.getMeasuredWidth();
                 // Log.e("hilength", "Height: " + finalHeight + " Width: " + finalWidth);
-
+            //    System.out.println("current final Height in details view is: " + finalHeight);
+            //    System.out.println("current final Wdith in listdetails view is: " + finalWidth);
 
                 //  detailsStaticMap = (ImageButton) this.findViewById(R.id.resultsStaticMapButton);
                 detailsStaticMapImageView = (ImageView) getResultDetailsActivity().findViewById(R.id.resultsStaticMapButton);
