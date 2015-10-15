@@ -205,6 +205,26 @@ public class MapsFromListActivity extends FragmentActivity {
         }
 
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if(!marker.getTitle().equals("Current Location!") ) {
+                    int indexInt = 0;
+                    Business business = null;
+                    String snippet = marker.getSnippet();
+                    indexInt = Integer.parseInt(marker.getSnippet());
+                    business = myBusinessList.get(indexInt);
+
+                    Intent sendIntent = new Intent(getMapsFromListActivity(), ResultDetailsActivity.class);
+                    sendIntent.putExtra("sentIntent", business);
+                    startActivity(sendIntent);
+
+                } else {
+
+                }
+            }
+        });
+
 
 
     }
@@ -212,6 +232,7 @@ public class MapsFromListActivity extends FragmentActivity {
     public MapsFromListActivity getMapsFromListActivity() {
         return MapsFromListActivity.this;
     }
+
 
 
 }
