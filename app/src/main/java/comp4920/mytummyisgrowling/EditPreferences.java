@@ -1,23 +1,25 @@
 package comp4920.mytummyisgrowling;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
 
-public class HomeActivity extends AppCompatActivity {
+public class EditPreferences extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_edit_preferences);
     }
 
-    public void login (View view) {
+    public void eatAlone (View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void eatInGroup (View view) {
+        Intent intent = new Intent(this, GroupSelect.class);
         startActivity(intent);
     }
 }

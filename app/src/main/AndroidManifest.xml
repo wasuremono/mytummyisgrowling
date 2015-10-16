@@ -62,7 +62,7 @@
                 android:value="comp4920.mytummyisgrowling.ResultListActivity" />
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Register"
             android:label="@string/title_activity_register" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -80,17 +80,58 @@
         <activity
             android:name=".AccountSettingsActivity"
             android:label="@string/title_activity_account_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.MainActivity" />
         </activity>
-        <activity android:name=".HomeActivity" >
+        <activity android:name=".Home" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Search"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".EditPreferences" >
+        </activity>
+        <activity
+            android:name=".EatAlone"
+            android:label="@string/title_activity_eat_alone"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".GroupSelect" >
+        </activity>
+        <activity
+            android:name=".CreateGroup"
+            android:label="@string/title_activity_create_group"
+            android:parentActivityName=".GroupSelect"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.GroupSelect" />
+        </activity>
+        <activity
+            android:name=".JoinGroup"
+            android:label="@string/title_activity_join_group"
+            android:parentActivityName=".CreateGroup"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.CreateGroup" />
+        </activity>
+        <activity
+            android:name=".GroupDetails"
+            android:label="@string/title_activity_group_details"
+            android:parentActivityName=".GroupSelect"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.GroupSelect" />
         </activity>
     </application>
 

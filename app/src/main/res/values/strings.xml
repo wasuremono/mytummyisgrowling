@@ -26,5 +26,10 @@
     <string name="register_credentials_next_button">Next</string>
     <string name="title_activity_maps_from_list">MapsFromListActivity</string>
     <string name="title_activity_account_settings">AccountSettingsActivity</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_eat_alone">EatAlone</string>
+    <string name="title_activity_create_group">CreateGroup</string>
+    <string name="title_activity_join_group">JoinGroup</string>
+    <string name="title_activity_group_details">GroupDetails</string>
 </resources>
 
