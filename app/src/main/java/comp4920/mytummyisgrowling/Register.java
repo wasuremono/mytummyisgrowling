@@ -28,7 +28,7 @@ import java.util.Map;
 import static com.android.volley.toolbox.Volley.newRequestQueue;
 
 
-public class RegisterActivity extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     private EditText[] credentials;
     private int[] credentialsMinLengths;
     private ArrayList<String> existingUsernames;
