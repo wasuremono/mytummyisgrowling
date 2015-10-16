@@ -29,16 +29,21 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        session = new SessionManager(getApplicationContext());
-        session.checkLogin();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        new Thread(new Runnable() {
+            public void run() {
+                session = new SessionManager(getApplicationContext());
+                session.checkLogin();
 
-        //Intent intent = new Intent(this, LoginActivity.class);
-       //startActivity(intent);
+            }
+
+            //Intent intent = new Intent(this, LoginActivity.class);
+            //startActivity(intent);
+        }).start();
     }
 
     @Override

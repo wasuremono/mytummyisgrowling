@@ -85,12 +85,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.MainActivity" />
         </activity>
-        <activity android:name=".Home" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity
+            android:name=".Home"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
         </activity>
         <activity
             android:name=".Search"

@@ -34,7 +34,7 @@ public class SessionManager {
 
     public void checkLogin(){
         if(!this.isLoggedin()){
-            Intent i = new Intent(_context, LoginActivity.class);
+            Intent i = new Intent(_context, Home.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
