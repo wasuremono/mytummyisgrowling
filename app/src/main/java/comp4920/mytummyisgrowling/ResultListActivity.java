@@ -50,6 +50,8 @@ public class ResultListActivity extends AppCompatActivity {
     private int finalHeight;
     private int finalWidth;
 
+    private String currLatLong;
+
     private ImageView detailsListStaticMapImageView;
 
 
@@ -64,6 +66,8 @@ public class ResultListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         final String latLong = intent.getStringExtra("currLatLong");
+
+        currLatLong = latLong;
 
         setTitle("ListView for " + message);
 
@@ -113,6 +117,7 @@ public class ResultListActivity extends AppCompatActivity {
                             //    Business clickedBusiness = businessList.get(position);
                                 Intent sendIntent = new Intent(getResultListActivity(), ResultDetailsActivity.class);
                                 sendIntent.putExtra("sentIntent", clickedBusiness);
+                                sendIntent.putExtra("sentCurrLatLong", currLatLong);
                                 startActivity(sendIntent);
 
 

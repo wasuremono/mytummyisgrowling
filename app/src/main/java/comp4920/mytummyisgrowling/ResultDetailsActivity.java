@@ -1,6 +1,7 @@
 package comp4920.mytummyisgrowling;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -36,6 +38,8 @@ public class ResultDetailsActivity extends AppCompatActivity {
 
     private String placeName;
 
+    private String currLatLong;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +50,29 @@ public class ResultDetailsActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
 
 
-        Business receivedBusiness = (Business) receivedIntent.getSerializableExtra("sentIntent");
+        final Business receivedBusiness = (Business) receivedIntent.getSerializableExtra("sentIntent");
         System.out.println("got the intent business");
 
+        final double destinationLat = receivedBusiness.getLocation().getCoordinate().getLatitude();
+        final double destinationLong = receivedBusiness.getLocation().getCoordinate().getLongitude();
+
+
+        currLatLong = (String) receivedIntent.getStringExtra("sentCurrLatLong");
+
         placeName = receivedBusiness.getName();
+
+        Button directionsButton = (Button) this.findViewById(R.id.resultDetailsDirButton);
+        directionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("https://maps.google.com?saddr=Current+Location&daddr="+destinationLat+","+destinationLong));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER );
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intent);
+            }
+        });
 
         ImageView detailsImage = (ImageView) this.findViewById(R.id.resultDetailsImage);
         TextView detailsName = (TextView) this.findViewById(R.id.resultDetailsName);
