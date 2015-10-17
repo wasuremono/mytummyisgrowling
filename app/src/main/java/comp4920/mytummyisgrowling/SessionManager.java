@@ -30,11 +30,12 @@ public class SessionManager {
     public void doLogout(){
         editor.putBoolean(isLogin,false);
         editor.commit();
+        checkLogin();
     }
 
     public void checkLogin(){
         if(!this.isLoggedin()){
-            Intent i = new Intent(_context, Home.class);
+            Intent i = new Intent(_context, LoginActivity.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

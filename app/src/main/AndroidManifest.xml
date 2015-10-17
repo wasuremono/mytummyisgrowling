@@ -75,7 +75,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="stateVisible|adjustPan">
         </activity>
         <activity
             android:name=".AccountSettingsActivity"

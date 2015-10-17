@@ -34,16 +34,9 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        new Thread(new Runnable() {
-            public void run() {
-                session = new SessionManager(getApplicationContext());
-                session.checkLogin();
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
 
-            }
-
-            //Intent intent = new Intent(this, LoginActivity.class);
-            //startActivity(intent);
-        }).start();
     }
 
     @Override
@@ -64,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivity(intent);
+        } else if (id == R.id.action_logout) {
+            session.doLogout();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
