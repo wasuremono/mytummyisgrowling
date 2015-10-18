@@ -174,7 +174,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                         System.out.println("Logged in as " + response.getId());
                         session.doLogin();
                         //return to MainActivity
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent i = new Intent(getApplicationContext(), Search.class);
                         startActivity(i);
                         dialog.dismiss();
                         finish();
