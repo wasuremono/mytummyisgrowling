@@ -233,6 +233,8 @@ public class MapsFromListActivity extends FragmentActivity {
         return MapsFromListActivity.this;
     }
 
-
+    public GoogleMap getResultMap() {
+        return mMap;
+    }
 
 }

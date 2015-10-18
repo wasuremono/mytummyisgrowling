@@ -12,14 +12,14 @@
     tools:context="comp4920.mytummyisgrowling.ResultListActivity"
     android:weightSum="1">
 
-    <ImageView
-        android:layout_width="fill_parent"
+    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
         android:layout_height="165dp"
-        android:id="@+id/resultListStaticMap"
         android:scaleType="centerCrop"
         android:layout_gravity="center_horizontal"
         android:layout_margin="5dp" />
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

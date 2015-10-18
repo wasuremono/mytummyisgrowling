@@ -29,6 +29,15 @@ import comp4920.mytummyisgrowling.searchResultObjects.Region;
 import comp4920.mytummyisgrowling.searchResultObjects.SearchResponse;
 import comp4920.mytummyisgrowling.searchResultObjects.Span;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -46,7 +55,9 @@ public class ResultListActivity extends AppCompatActivity {
     private ArrayList<Business> businessList;
 
     private ResultListAdapter resultListAdapter;
-
+    private static LatLng NEWARK;
+    private UiSettings mUiSettings;
+    private CameraPosition POSITION;
     private int finalHeight;
     private int finalWidth;
 
@@ -66,9 +77,19 @@ public class ResultListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         final String latLong = intent.getStringExtra("currLatLong");
+        final GoogleMap mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+                .getMap();
 
         currLatLong = latLong;
-
+        String currLatLongList[] = currLatLong.split("\\s*,\\s*");
+        String currLat = currLatLongList[0];
+        String currLong = currLatLongList[1];
+        NEWARK = new LatLng(Double.parseDouble(currLat), Double.parseDouble(currLong));
+        POSITION =
+                new CameraPosition.Builder().target(NEWARK)
+                        .zoom(12)
+                        .build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(POSITION));
         setTitle("ListView for " + message);
 
         nameValues = new ArrayList<String>();
@@ -77,6 +98,7 @@ public class ResultListActivity extends AppCompatActivity {
         resultListAdapter = new ResultListAdapter(businessList);
 
         new Thread(new Runnable() {
+
             public void run() {
                 String resultBody;
                 String searchCuisine = message;
@@ -106,6 +128,32 @@ public class ResultListActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //ArrayAdapter adapter = new ArrayAdapter(getResultListActivity(), android.R.layout.simple_list_item_1, nameValues);
+                        // testing git commitsdfadsfasdfsdfs test
+                        mMap.setMyLocationEnabled(false);
+                        mUiSettings = mMap.getUiSettings();
+                        mUiSettings.setZoomControlsEnabled(true);
+                        mUiSettings.setCompassEnabled(true);
+                        mUiSettings.setMyLocationButtonEnabled(true);
+                        mUiSettings.setScrollGesturesEnabled(true);
+                        mUiSettings.setZoomGesturesEnabled(true);
+                        mUiSettings.setTiltGesturesEnabled(false);
+                        mUiSettings.setRotateGesturesEnabled(true);
+
+                        Marker currLocation = mMap.addMarker(new MarkerOptions().position(NEWARK)
+                                        .title("Current Location!")
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                        .snippet("This is where you are.")
+                        );
+                        for (int i = 0; i < businessList.size(); i++) {
+                            Business currBus = businessList.get(i);
+                            String currBusName = currBus.getName();
+                            LatLng currBusLatLng = new LatLng(currBus.getLocation().getCoordinate().getLatitude(),
+                                    currBus.getLocation().getCoordinate().getLongitude());
+                            String indexString = Integer.toString(i).trim();
+                            System.out.println("indexString is: " + indexString);
+                            Marker businessMarker = mMap.addMarker(new MarkerOptions().position(currBusLatLng).title(currBusName).snippet(indexString));
+                        }
+
                         ListView listView = (ListView) findViewById(R.id.resultListView);
                         listView.setAdapter(resultListAdapter);
 
@@ -114,7 +162,7 @@ public class ResultListActivity extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 System.out.println("YOU CLICKED " + resultListAdapter.businessList.get(position).getName());
                                 Business clickedBusiness = (resultListAdapter.businessList.get(position));
-                            //    Business clickedBusiness = businessList.get(position);
+                                //    Business clickedBusiness = businessList.get(position);
                                 Intent sendIntent = new Intent(getResultListActivity(), ResultDetailsActivity.class);
                                 sendIntent.putExtra("sentIntent", clickedBusiness);
                                 sendIntent.putExtra("sentCurrLatLong", currLatLong);
@@ -128,6 +176,7 @@ public class ResultListActivity extends AppCompatActivity {
                             }
                         });
 
+/**
                         final ImageView iv = (ImageView)findViewById(R.id.resultListStaticMap);
 
                         iv.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +251,7 @@ public class ResultListActivity extends AppCompatActivity {
                                 return true;
                             }
                         });
+ **/
                     }
                 });
 
