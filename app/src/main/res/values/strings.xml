@@ -24,5 +24,13 @@
     <string name="register_password_mismatch">These passwords do not match.</string>
     <string name="register_confirm_password">Confirm Password</string>
     <string name="register_credentials_next_button">Next</string>
+
+    <string name="title_activity_edit_preferences">EditPreferences</string>
+    <string name="edit_preferences_no_preferences_text">You have no cuisine preferences.\nAdd some below.</string>
+    <string name="edit_preferences_sub_title_text">You can set a maximum of 10 preferences.</string>
+    <string name="edit_preferences_max_pref_error_text">You can not have more than 10 preferences.</string>
+    <string name="edit_preferences_skip_button">Skip\n>></string>
+    <string name="edit_preferences_save_changes_button">Save Changes\n>></string>
+    <string name="edit_preferences_discard_changes_button">Discard Changes\n>></string>
 </resources>
 

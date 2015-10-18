@@ -50,7 +50,7 @@
         <activity
             android:name=".ResultDetailsActivity"
             android:label="@string/title_activity_result_details"
-            android:parentActivityName=".ResultListActivity" >
+            android:parentActivityName=".ResultListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.ResultListActivity" />
@@ -58,6 +58,14 @@
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name=".EditPreferencesActivity"
+            android:label="@string/title_activity_edit_preferences"
+            android:parentActivityName=".RegisterActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.RegisterActivity" />
         </activity>
     </application>
 
