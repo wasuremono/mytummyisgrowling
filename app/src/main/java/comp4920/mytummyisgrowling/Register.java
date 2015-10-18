@@ -11,9 +11,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 
-public class RegisterActivity extends AppCompatActivity {
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.android.volley.toolbox.Volley.newRequestQueue;
+
+
+public class Register extends AppCompatActivity {
     private EditText[] credentials;
     private int[] credentialsMinLengths;
     private ArrayList<String> existingUsernames;
@@ -43,18 +58,26 @@ public class RegisterActivity extends AppCompatActivity {
         validPassword = false;
 
         //Watch for changes in username field
-        credentials[0].addTextChangedListener(new TextWatcher(){
+        credentials[0].addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 //Check username is valid
                 TextView usernameHint = (TextView) findViewById(R.id.register_username_hint);
-                if(credentials[0].length() >= credentialsMinLengths[0]){
+                if (credentials[0].length() >= credentialsMinLengths[0]) {
                     String givenUsername = credentials[0].getText().toString().toLowerCase();
-                    if(existingUsernames.contains(givenUsername)){
+                    validUsername = true;
+                    //The username/email availability check will be applied during the POST request to the database
+
+                    /**
+                    if (existingUsernames.contains(givenUsername)) {
                         validUsername = false;
                         usernameHint.setText(R.string.register_username_taken);
                         usernameHint.setTextColor(0xFFFF0000);
@@ -63,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
                         usernameHint.setText(R.string.register_username_available);
                         usernameHint.setTextColor(0xFF00FF00);
                     }
+                     **/
                 } else {
                     validUsername = false;
                     usernameHint.setText(R.string.register_enter_username_hint);
@@ -71,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //Activate button if username and password is valid
                 Button nextButton = (Button) findViewById(R.id.register_credentials_next_button);
-                if(validUsername && validPassword){
+                if (validUsername && validPassword) {
                     nextButton.setEnabled(true);
                     nextButton.setClickable(true);
                 } else {
@@ -82,17 +106,21 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         //Watch for changes in password fields
-        for(int i = 1; i < credentials.length; i++) {
+        for (int i = 1; i < credentials.length; i++) {
             credentials[i].addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
                 @Override
                 public void afterTextChanged(Editable s) {
                     //Check if password is valid
                     TextView passwordHint = (TextView) findViewById(R.id.register_password_hint);
-                    if((credentials[1].length() >= credentialsMinLengths[1]) && (credentials[2].length() >= credentialsMinLengths[2])) {
+                    if ((credentials[1].length() >= credentialsMinLengths[1]) && (credentials[2].length() >= credentialsMinLengths[2])) {
                         if (credentials[1].getText().toString().equals(credentials[2].getText().toString())) {
                             validPassword = true;
                             passwordHint.setText(R.string.register_enter_password_hint);
@@ -110,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     //Activate button if both username and password are valid
                     Button nextButton = (Button) findViewById(R.id.register_credentials_next_button);
-                    if(validUsername && validPassword){
+                    if (validUsername && validPassword) {
                         nextButton.setEnabled(true);
                         nextButton.setClickable(true);
                     } else {
@@ -144,11 +172,49 @@ public class RegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void acceptCredentials (View view){
-        String username = ((EditText) findViewById(R.id.register_enter_username)).getText().toString();
-        String password = ((EditText) findViewById(R.id.register_enter_password)).getText().toString();
+    public void acceptCredentials(View view) throws IOException {
+        final String username = ((EditText) findViewById(R.id.register_enter_username)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.register_enter_password)).getText().toString();
         //TODO: Check and make sure username was not taken while user was registering
-        //TODO: add user's credentials to database
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_REGISTER, new Response.Listener<String>(){
+
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                System.out.println(s);
+                RegisterResponse response = gson.fromJson(s, RegisterResponse.class);
+                if (!response.getError()) {
+                    System.out.println("Account created with uid of " + response.getId());
+                    finish();
+                } else {
+                    System.out.println(response.getErrorMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               System.out.println("That didn't work!");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", "derp");
+                params.put("email", username);
+                params.put("password", password);
+
+                return params;
+            }
+
+
+        };
+// Add the request to the RequestQueue.
+        queue.add(strReq);
+
+
+                //TODO: add user's credentials to database
         //TODO: Next activity (let user edit preferences, or just log them in)
     }
 }

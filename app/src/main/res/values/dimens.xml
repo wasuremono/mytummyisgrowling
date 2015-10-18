@@ -8,4 +8,5 @@
     <dimen name="register_edit_text_width">250dp</dimen>
     <dimen name="register_hint_left_margin">10dp</dimen>
     <dimen name="register_layout_button_top_margin">40dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

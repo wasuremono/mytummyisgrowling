@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -46,6 +47,13 @@ public class ResultListActivity extends AppCompatActivity {
 
     private ResultListAdapter resultListAdapter;
 
+    private int finalHeight;
+    private int finalWidth;
+
+    private String currLatLong;
+
+    private ImageView detailsListStaticMapImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,8 @@ public class ResultListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         final String latLong = intent.getStringExtra("currLatLong");
+
+        currLatLong = latLong;
 
         setTitle("ListView for " + message);
 
@@ -107,6 +117,7 @@ public class ResultListActivity extends AppCompatActivity {
                             //    Business clickedBusiness = businessList.get(position);
                                 Intent sendIntent = new Intent(getResultListActivity(), ResultDetailsActivity.class);
                                 sendIntent.putExtra("sentIntent", clickedBusiness);
+                                sendIntent.putExtra("sentCurrLatLong", currLatLong);
                                 startActivity(sendIntent);
 
 
@@ -117,6 +128,80 @@ public class ResultListActivity extends AppCompatActivity {
                             }
                         });
 
+                        final ImageView iv = (ImageView)findViewById(R.id.resultListStaticMap);
+
+                        iv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                String currLatLong = latLong;
+                                String currLatLongList[] = currLatLong.split("\\s*,\\s*");
+                                String currLat = currLatLongList[0];
+                                String currLong = currLatLongList[1];
+
+                                Intent sendBusinessList = new Intent(getResultListActivity(), MapsFromListActivity.class);
+                                sendBusinessList.putExtra("sentLatBusinessList", currLat);
+                                sendBusinessList.putExtra("sentLongBusinessList", currLong);
+                                sendBusinessList.putExtra("sentBusinessList", businessList);
+                                startActivity(sendBusinessList);
+                            }
+                        });
+
+
+                        final ViewTreeObserver vto = iv.getViewTreeObserver();
+                        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                            public boolean onPreDraw() {
+                                finalHeight = iv.getMeasuredHeight();
+                                finalWidth = iv.getMeasuredWidth();
+
+                             //   System.out.println("current final Height in listView is: " + finalHeight);
+                             //   System.out.println("current final Wdith in listView is: " + finalWidth);
+
+                               // String link = "http://lovemeow.com/wp-content/uploads/2013/05/gLcOq-Imgur.jpg";
+
+                                detailsListStaticMapImageView = (ImageView) getResultListActivity().findViewById(R.id.resultListStaticMap);
+
+                                StringBuffer mapURLBuffer = new StringBuffer("https://maps.googleapis.com/maps/api/staticmap?center=");
+                                // Add user's last known location coordinates
+                                // as centre of map.
+                                mapURLBuffer.append(latLong);
+                                mapURLBuffer.append("&zoom=13");
+                                mapURLBuffer.append("&size=");
+                                mapURLBuffer.append(finalWidth + "x" + finalHeight);
+
+                                // %7C  =  |     (pipe)
+                                // Start adding markers of restaurants.
+                                mapURLBuffer.append("&markers=color:green%7C");
+                                mapURLBuffer.append("label:A%7C");
+                                mapURLBuffer.append(latLong);
+
+
+                             //   String listMarkers = "";
+                              //  mapURLBuffer.append("&markers=color:red");
+                                for(int i = 0; i < businessList.size(); i++) {
+                                    String markerString = "&markers=color:red%7Clabel:" + i + "%7C";
+                                    mapURLBuffer.append(markerString);
+                                    Business currBus = businessList.get(i);
+
+                                    double latitude = currBus.getLocation().getCoordinate().getLatitude();
+                                    double longitude = currBus.getLocation().getCoordinate().getLongitude();
+                                    String busLatLong = latitude + "," + longitude;
+                                    mapURLBuffer.append(busLatLong);
+                                    // markerString = markerString + busLatLong;
+                              //      System.out.println("markerString: " + markerString);
+                                    //listMarkers = markerString;
+
+                                }
+
+                            //    mapURLBuffer.append(listMarkers);
+                           //     System.out.println("mapURLBuffer: " + mapURLBuffer);
+
+                                Picasso.with(getResultListActivity()).load(mapURLBuffer.toString()).into(detailsListStaticMapImageView);
+
+
+                                return true;
+                            }
+                        });
                     }
                 });
 

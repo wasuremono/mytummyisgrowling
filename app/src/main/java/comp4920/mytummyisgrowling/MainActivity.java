@@ -23,17 +23,20 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     public static final String TAG = MapsActivity.class.getSimpleName();
     private Location currentLocation;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
+
     }
 
     @Override
@@ -52,9 +55,11 @@ public class MainActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.action_logout) {
+            session.doLogout();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

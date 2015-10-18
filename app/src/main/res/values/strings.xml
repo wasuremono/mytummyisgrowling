@@ -10,6 +10,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
     <string name="title_activity_display_message">My Message</string>
     <string name="title_activity_result_list">ResultListActivity</string>
     <string name="title_activity_result_details">ResultDetailsActivity</string>
@@ -32,5 +33,14 @@
     <string name="edit_preferences_skip_button">Skip\n>></string>
     <string name="edit_preferences_save_changes_button">Save Changes\n>></string>
     <string name="edit_preferences_discard_changes_button">Discard Changes\n>></string>
+
+    <string name="title_activity_maps_from_list">MapsFromListActivity</string>
+    <string name="title_activity_account_settings">AccountSettingsActivity</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_eat_alone">EatAlone</string>
+    <string name="title_activity_create_group">CreateGroup</string>
+    <string name="title_activity_join_group">JoinGroup</string>
+    <string name="title_activity_group_details">GroupDetails</string>
+
 </resources>
 

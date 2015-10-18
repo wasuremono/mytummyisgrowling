@@ -13,6 +13,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,7 +32,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" >
+            android:label="@string/title_activity_maps"
+            android:launchMode="singleTop" >
         </activity>
         <activity
             android:name=".MainActivity"
@@ -56,16 +62,84 @@
                 android:value="comp4920.mytummyisgrowling.ResultListActivity" />
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Register"
             android:label="@string/title_activity_register" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MapsFromListActivity"
+            android:label="@string/title_activity_maps_from_list" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="stateVisible|adjustPan">
+        </activity>
+        <activity
+            android:name=".AccountSettingsActivity"
+            android:label="@string/title_activity_account_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Home"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Search"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".EatingWithActivity" >
+        </activity>
+        <activity
+            android:name=".EatAlone"
+            android:label="@string/title_activity_eat_alone"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".GroupSelect" >
+        </activity>
+        <activity
+            android:name=".CreateGroup"
+            android:label="@string/title_activity_create_group"
+            android:parentActivityName=".GroupSelect"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.GroupSelect" />
+        </activity>
+        <activity
+            android:name=".JoinGroup"
+            android:label="@string/title_activity_join_group"
+            android:parentActivityName=".CreateGroup"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.CreateGroup" />
+        </activity>
+        <activity
+            android:name=".GroupDetails"
+            android:label="@string/title_activity_group_details"
+            android:parentActivityName=".GroupSelect"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.GroupSelect" />
         </activity>
         <activity
             android:name=".EditPreferencesActivity"
             android:label="@string/title_activity_edit_preferences"
-            android:parentActivityName=".RegisterActivity">
+            android:parentActivityName="Search">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="comp4920.mytummyisgrowling.RegisterActivity" />
+                android:value="comp4920.mytummyisgrowling.Search" />
         </activity>
     </application>
 

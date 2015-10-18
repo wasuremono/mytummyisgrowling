@@ -1,5 +1,6 @@
 package comp4920.mytummyisgrowling;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -216,10 +217,14 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
     public void submitWithChanges (View view){
         //TODO: update users preferences in database
         //TODO: go to next activity
+        Intent intent = new Intent(this, EatingWithActivity.class);
+        startActivity(intent);
     }
 
     public void submitWithoutChanges (View view){
         //TODO: go to next activity
+        Intent intent = new Intent(this, EatingWithActivity.class);
+        startActivity(intent);
     }
 }
 
