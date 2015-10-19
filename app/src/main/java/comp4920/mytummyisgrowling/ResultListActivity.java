@@ -176,7 +176,22 @@ public class ResultListActivity extends AppCompatActivity {
                             }
                         });
 
-/**
+                        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                            @Override
+                            public void onMapClick(LatLng latLng) {
+                                String currLatLong = latLong;
+                                String currLatLongList[] = currLatLong.split("\\s*,\\s*");
+                                String currLat = currLatLongList[0];
+                                String currLong = currLatLongList[1];
+
+                                Intent sendBusinessList = new Intent(getResultListActivity(), MapsFromListActivity.class);
+                                sendBusinessList.putExtra("sentLatBusinessList", currLat);
+                                sendBusinessList.putExtra("sentLongBusinessList", currLong);
+                                sendBusinessList.putExtra("sentBusinessList", businessList);
+                                startActivity(sendBusinessList);
+                            }
+                        });
+                        /**
                         final ImageView iv = (ImageView)findViewById(R.id.resultListStaticMap);
 
                         iv.setOnClickListener(new View.OnClickListener() {
@@ -251,7 +266,7 @@ public class ResultListActivity extends AppCompatActivity {
                                 return true;
                             }
                         });
- **/
+                         **/
                     }
                 });
 
