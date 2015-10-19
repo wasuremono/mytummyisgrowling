@@ -94,23 +94,20 @@
         </activity>
         <activity
             android:name=".Search"
-            android:label="@string/title_activity_search"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/title_activity_search">
         </activity>
         <activity android:name=".EatingWithActivity" >
         </activity>
         <activity
             android:name=".EatAlone"
-            android:label="@string/title_activity_eat_alone"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/title_activity_eat_alone">
         </activity>
         <activity android:name=".GroupSelect" >
         </activity>
         <activity
             android:name=".CreateGroup"
             android:label="@string/title_activity_create_group"
-            android:parentActivityName=".GroupSelect"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:parentActivityName=".GroupSelect">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.GroupSelect" />
@@ -118,8 +115,7 @@
         <activity
             android:name=".JoinGroup"
             android:label="@string/title_activity_join_group"
-            android:parentActivityName=".CreateGroup"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:parentActivityName=".CreateGroup">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.CreateGroup" />
@@ -127,8 +123,7 @@
         <activity
             android:name=".GroupDetails"
             android:label="@string/title_activity_group_details"
-            android:parentActivityName=".GroupSelect"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:parentActivityName=".GroupSelect">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.GroupSelect" />

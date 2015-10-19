@@ -15,9 +15,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 
+import com.google.gson.Gson;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
+
+import org.json.simple.JSONObject;
 
 public class EditPreferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private TextView subHeaderText;
@@ -215,6 +219,18 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
     }
 
     public void submitWithChanges (View view){
+        /**
+         Iterator<Preference> pIterator = preferenceList.iterator();
+         while(pIterator.hasNext()){
+         Preference p = (Preference) pIterator.next();
+         Gson gson = new Gson();
+         gson.toJson(p);
+         System.out.println(gson.toJson(p));
+         }
+         **/
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(preferenceList));
+
         //TODO: update users preferences in database
         //TODO: go to next activity
         Intent intent = new Intent(this, EatingWithActivity.class);

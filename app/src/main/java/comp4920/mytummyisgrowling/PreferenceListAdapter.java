@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Carl Oehme on 11/10/2015.
