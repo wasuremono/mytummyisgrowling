@@ -21,9 +21,11 @@ public class SessionManager {
 
     private static final String PREF_NAME = "MTIGPref";
     private static final String isLogin = "isLoggedin";
+    private static final String userId = "userID";
 
-    public void doLogin(){
+    public void doLogin(int id) {
         editor.putBoolean(isLogin,true);
+        editor.putInt(userId, id);
         editor.commit();
     }
 
@@ -49,5 +51,9 @@ public class SessionManager {
 
     public boolean isLoggedin() {
         return pref.getBoolean(isLogin,false);
+    }
+
+    public int getId() {
+        return pref.getInt(userId, 0);
     }
 }

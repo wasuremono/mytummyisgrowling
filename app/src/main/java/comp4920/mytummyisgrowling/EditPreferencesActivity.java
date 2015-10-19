@@ -11,12 +11,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
@@ -32,7 +41,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
     private ArrayList<Preference> preferenceList;
     private PreferenceListAdapter preferenceAdapter;
     private DragSortListView prefLV;
-
+    private SessionManager session;
     private Button skipButton;
     private Button discardChangesButton;
     private Button saveChangesButton;
@@ -47,6 +56,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
                         Preference pref = preferenceAdapter.getItem(from);
                         preferenceAdapter.remove(pref);
                         preferenceAdapter.insert(pref, to);
+                        pref.setRank(to + 1);
                     }
                 }
             };
@@ -88,6 +98,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_preferences);
+        session = new SessionManager(getApplicationContext());
 
         //Get TextViews from layout
         subHeaderText =  (TextView) findViewById(R.id.edit_preferences_sub_header_text);
@@ -170,6 +181,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
 
                 //Add cuisine to preference list
                 preferenceList.add(new Preference(cuisine));
+                preferenceList.get(preferenceList.size() - 1).setRank(preferenceList.size());
                 DragSortListView preferenceListView = (DragSortListView) findViewById(R.id.edit_preferences_layout_list);
                 PreferenceListAdapter preferenceAdapter = (PreferenceListAdapter) preferenceListView.getInputAdapter();
                 preferenceAdapter.notifyDataSetChanged();
@@ -228,8 +240,35 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
          System.out.println(gson.toJson(p));
          }
          **/
-        Gson gson = new Gson();
+        final Gson gson = new Gson();
         System.out.println(gson.toJson(preferenceList));
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_EDITPREF, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String s) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("That didn't work!");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", String.valueOf(session.getId()));
+                params.put("JSON", gson.toJson(preferenceList));
+
+                return params;
+            }
+
+
+        };
+// Add the request to the RequestQueue.
+        queue.add(strReq);
 
         //TODO: update users preferences in database
         //TODO: go to next activity

@@ -172,7 +172,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     LoginResponse response = gson.fromJson(s, LoginResponse.class);
                     if (!response.getError()) {
                         System.out.println("Logged in as " + response.getId());
-                        session.doLogin();
+                        session.doLogin(response.getId());
                         //return to MainActivity
                         Intent i = new Intent(getApplicationContext(), Search.class);
                         startActivity(i);
