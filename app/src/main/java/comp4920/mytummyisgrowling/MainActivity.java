@@ -5,6 +5,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -113,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements
                 String message = editText.getText().toString();
                 intent.putExtra(EXTRA_MESSAGE, message);
 
-
                 String currLatitude = String.valueOf(currentLocation.getLatitude());
                 String currLongitude = String.valueOf(currentLocation.getLongitude());
                 String currLatLong = currLatitude + "," + currLongitude;
@@ -125,8 +125,14 @@ public class MainActivity extends AppCompatActivity implements
                 intent.putExtra("mainMyLat", myLat);
                 intent.putExtra("mainMyLong", myLong);
 
+                // Check if the user has entered a cuisine into the bar
+                if(TextUtils.isEmpty(message)) {
+                    editText.setError("Can't have an empty message.");
+                    return;
+                }
 
                 startActivity(intent);
+
             }
         });
 
@@ -138,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements
                 // On clicking curr location button, get the user's current location.
                 // Send the user to the Results List Activity
                 // And put the current lat and long on the intent.
+
                 Intent intent = new Intent(getMainActivity(), ResultListActivity.class);
                 EditText editText = (EditText) findViewById(R.id.mainCuisine);
                 String message = editText.getText().toString();
@@ -152,14 +159,28 @@ public class MainActivity extends AppCompatActivity implements
                 intent.putExtra("mainMyLat", myLat);
                 intent.putExtra("mainMyLong", myLong);
 
+                // Check if the user has entered a cuisine into the bar
+                if(TextUtils.isEmpty(message)) {
+                    editText.setError("Can't have an empty message.");
+                    return;
+                }
+                AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.mainAutoComplete);
+                String autoCompMessage = autoCompView.getText().toString();
+                // Check if the user has entered a location.
+                if(TextUtils.isEmpty(autoCompMessage)) {
+                    autoCompView.setError("Can't have an empty location.");
+                    return;
+                }
+
+                // Check if the user has entered a valid address
+                if(!isValidAddress(getApplicationContext(), autoCompMessage)) {
+                    autoCompView.setError("Enter a valid address.");
+                    return;
+                }
 
                 startActivity(intent);
             }
         });
-
-
-
-
 
     }
 
@@ -185,7 +206,29 @@ public class MainActivity extends AppCompatActivity implements
         return latLng; //LatLng value of address
     }
 
+    public boolean isValidAddress(Context appContext, String strAddress) {
+        boolean result = false;
+        LatLng latLng = null;
+        Geocoder geocoder = new Geocoder(appContext, Locale.getDefault());
+        List<Address> geoResults = null;
 
+        try {
+            geoResults = geocoder.getFromLocationName(strAddress, 1);
+            while (geoResults.size()==0) {
+                geoResults = geocoder.getFromLocationName(strAddress, 1);
+            }
+            if (geoResults.size()>0) {
+              //  Address addr = geoResults.get(0);
+              // latLng = new LatLng(addr.getLatitude(),addr.getLongitude());
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
+       return result;
+    }
 
 
     //public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
