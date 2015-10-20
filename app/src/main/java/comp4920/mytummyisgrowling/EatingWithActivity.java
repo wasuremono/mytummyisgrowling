@@ -10,7 +10,7 @@ public class EatingWithActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_preferences);
+        setContentView(R.layout.activity_eating_with);
     }
 
     public void eatAlone (View view) {

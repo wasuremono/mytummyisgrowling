@@ -13,7 +13,7 @@
         android:layout_height="75dp"
         android:id="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/creategroup"
+        android:background="@drawable/eatalone"
         android:onClick="eatAlone"
         />
 
@@ -23,7 +23,7 @@
         android:id="@+id/chooseOwnButton"
         android:layout_below="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/joingroup"
+        android:background="@drawable/eatingroup"
         android:onClick="eatInGroup"
         />
 

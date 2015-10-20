@@ -118,6 +118,12 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
     /*    preferenceList = new ArrayList<>(Arrays.asList(new Preference("Japanese", 1), new Preference("Thai", 2)));*/
         preferenceList = new ArrayList<>();
 
+        for (Preference p: preferenceList) {
+            String cuisine = p.getCuisine();
+            if(cuisineList.contains(cuisine))
+                cuisineList.remove(cuisine);
+        }
+
         updateSubHeaderText();
 
         //Set up draggable preference list
