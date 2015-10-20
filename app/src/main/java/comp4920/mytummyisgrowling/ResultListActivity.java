@@ -3,6 +3,7 @@ package comp4920.mytummyisgrowling;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -62,16 +63,17 @@ public class ResultListActivity extends AppCompatActivity {
     private CameraPosition POSITION;
     private int finalHeight;
     private int finalWidth;
-    private ProgressDialog dialog;
     private String currLatLong;
 
     private ImageView detailsListStaticMapImageView;
+    private ProgressDialog dialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_list);
+        dialog = ProgressDialog.show(this, "", "Searching...", true);
 
 
 
@@ -114,8 +116,6 @@ public class ResultListActivity extends AppCompatActivity {
                 YelpAPI yelpApi = new YelpAPI();
                //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
                 int limit = 30 / categories.size();
-                dialog.setMessage("Now Searching...");
-                dialog.show();
                 for (String category : categories) {
                     int thisCat = 0;
                     resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
@@ -141,7 +141,6 @@ public class ResultListActivity extends AppCompatActivity {
                 for(String business : nameValues) {
                     System.out.println(business);
                 }
-                dialog.dismiss();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -174,7 +173,7 @@ public class ResultListActivity extends AppCompatActivity {
 
                         ListView listView = (ListView) findViewById(R.id.resultListView);
                         listView.setAdapter(resultListAdapter);
-
+                        dialog.dismiss();
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
