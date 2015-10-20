@@ -39,6 +39,7 @@ public class SessionManager {
 
     public void doLogout(){
         editor.putBoolean(isLogin, false);
+        editor.putString(avatarPath, "");
         editor.commit();
         checkLogin();
     }

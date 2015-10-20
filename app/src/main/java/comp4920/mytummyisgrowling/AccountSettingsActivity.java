@@ -1,5 +1,6 @@
 package comp4920.mytummyisgrowling;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -47,10 +48,14 @@ public class AccountSettingsActivity extends Activity {
     public static final String PREFS_NAME = "MyPrefs";
     private String picturePath;
     private SessionManager session;
+    private Bitmap thumbnail;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
         session = new SessionManager(getApplicationContext());
         setContentView(R.layout.activity_account_settings);
         avatarView = (ImageView) findViewById(R.id.avatar_view);
@@ -62,8 +67,59 @@ public class AccountSettingsActivity extends Activity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), 1);
+
             }
         });
+        Button saveButton = (Button) findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                updateAvatar();
+
+            }
+        });
+    }
+
+    private void updateAvatar() {
+        dialog.setMessage("Uploading Avatar");
+        dialog.show();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        final byte[] byteArray = byteArrayOutputStream.toByteArray();
+        final String image_str = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_UPLOADAVATAR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String s) {
+                //System.out.println("Sent " + s + " bytes.");
+                dialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.dismiss();
+                System.out.println("That didn't work!");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user", String.valueOf(session.getId()));
+                params.put("data", image_str);
+
+                return params;
+            }
+
+
+        };
+// Add the request to the RequestQueue.
+        queue.add(strReq);
+
+
     }
 
     @Override
@@ -97,7 +153,8 @@ public class AccountSettingsActivity extends Activity {
                 ;
                 picturePath = getPath(selectedImage);
                 System.out.println(picturePath);
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                thumbnail = (BitmapFactory.decodeFile(picturePath));
+                resize();
                 avatarView.setImageBitmap(thumbnail);
                 session.setAvatarPath(picturePath);
             }
@@ -109,43 +166,23 @@ public class AccountSettingsActivity extends Activity {
     protected void onResume() {
         picturePath = session.getAvatarpath();
         if (picturePath != "") {
-            Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+            thumbnail = (BitmapFactory.decodeFile(picturePath));
+
+            resize();
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, 300, 300, false);
             avatarView.setImageBitmap(thumbnail);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            thumbnail.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            final byte[] byteArray = byteArrayOutputStream.toByteArray();
-            final String image_str = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            RequestQueue queue = Volley.newRequestQueue(this);
-            StringRequest strReq = new StringRequest(Request.Method.POST,
-                    AppConfig.URL_UPLOADAVATAR, new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String s) {
-                    //System.out.println("Sent " + s + " bytes.");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    System.out.println("That didn't work!");
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("user", String.valueOf(session.getId()));
-                    params.put("data", image_str);
-
-                    return params;
-                }
-
-
-            };
-// Add the request to the RequestQueue.
-            queue.add(strReq);
-
-
         }
         super.onResume();
+    }
+
+    private void resize() {
+        int wratio = (int) thumbnail.getWidth() / 300;
+        int hratio = (int) thumbnail.getHeight() / 300;
+        if (thumbnail.getWidth() > thumbnail.getHeight()) {
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, 300, 300 / wratio, false);
+        } else {
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, 300 / hratio, 300, false);
+        }
     }
 
     public String getPath(Uri uri) {
