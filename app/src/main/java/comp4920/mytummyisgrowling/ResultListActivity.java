@@ -108,36 +108,31 @@ public class ResultListActivity extends AppCompatActivity {
             public void run() {
                 String resultBody;
                 String searchCuisine = message;
-
+                Gson gson = new Gson();
+                List<String> categories = Arrays.asList(searchCuisine.split(","));
                 YelpAPI yelpApi = new YelpAPI();
                //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-                resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, myLatLong);
-                System.out.println("Result Body");
-                System.out.println(resultBody);
-
-                searchResult = resultBody;
-                Gson gson = new Gson();
-                SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
-
-                List<String> categories = Arrays.asList(searchCuisine.split(","));
-
-                for(Business business : response.getBusinesses()) {
-                    boolean hasCategory = false;
-                    if (business.getCategories() != null) {
-                        for (List l : business.getCategories()) {
-                            for (String category : categories) {
+                for (String category : categories) {
+                    resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
+                    System.out.println("Result Body");
+                    System.out.println(resultBody);
+                    searchResult = resultBody;
+                    SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
+                    for (Business business : response.getBusinesses()) {
+                        boolean hasCategory = false;
+                        if (business.getCategories() != null) {
+                            for (List l : business.getCategories()) {
                                 if (l.contains(category)) hasCategory = true;
+
                             }
 
-                        }
-
-                        if (hasCategory) {
-                            nameValues.add(business.getName());
-                            businessList.add(business);
+                            if (hasCategory && (businessList.size() < 30)) {
+                                nameValues.add(business.getName());
+                                businessList.add(business);
+                            }
                         }
                     }
                 }
-
                 for(String business : nameValues) {
                     System.out.println(business);
                 }
