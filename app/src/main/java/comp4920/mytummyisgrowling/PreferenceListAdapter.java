@@ -19,9 +19,12 @@ class Preference {
     private String cuisine;
     private int rank;
 
-    public Preference(String cuisine){
+    public Preference(String cuisine, int rank) {
         this.cuisine = cuisine;
-        this.rank = 0;
+        this.rank = rank;
+    }
+
+    public Preference() {
     }
 
     public String getCuisine(){

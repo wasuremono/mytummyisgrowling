@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -172,7 +173,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     LoginResponse response = gson.fromJson(s, LoginResponse.class);
                     if (!response.getError()) {
                         System.out.println("Logged in as " + response.getId());
-                        session.doLogin(response.getId());
+                        List<Preference> p = response.getPrefs();
+                        Iterator<Preference> pIterator = p.iterator();
+                        session.doLogin(response.getId(), gson.toJson(p));
+                        System.out.println(session.getUserPrefs());
                         //return to MainActivity
                         Intent i = new Intent(getApplicationContext(), Search.class);
                         startActivity(i);
@@ -193,8 +197,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("email", email);
-                    params.put("password", password);
+
+                    params.put("email", "test@test.com");
+                    params.put("password", "password");
 
                     return params;
                 }

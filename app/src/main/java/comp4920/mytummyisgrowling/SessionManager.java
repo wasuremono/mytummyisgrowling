@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+import java.util.List;
+
 /**
  * Created by Ken on 10/13/2015.
  */
@@ -22,15 +25,20 @@ public class SessionManager {
     private static final String PREF_NAME = "MTIGPref";
     private static final String isLogin = "isLoggedin";
     private static final String userId = "userID";
+    private static final String userPrefs = "userPref";
+    private static final String avatarPath = "userAvatar";
 
-    public void doLogin(int id) {
-        editor.putBoolean(isLogin,true);
+    public void doLogin(int id, String prefs) {
+        editor.putBoolean(isLogin, true);
         editor.putInt(userId, id);
+        editor.putString(userPrefs, prefs);
+        //TODO: Add user preferences and user avatar here
         editor.commit();
+
     }
 
     public void doLogout(){
-        editor.putBoolean(isLogin,false);
+        editor.putBoolean(isLogin, false);
         editor.commit();
         checkLogin();
     }
@@ -55,5 +63,18 @@ public class SessionManager {
 
     public int getId() {
         return pref.getInt(userId, 0);
+    }
+
+    public void setAvatarPath(String filePath) {
+        editor.putString(avatarPath, filePath);
+        editor.commit();
+    }
+
+    public String getUserPrefs() {
+        return pref.getString(userPrefs, "");
+    }
+
+    public String getAvatarpath() {
+        return pref.getString(avatarPath, "");
     }
 }

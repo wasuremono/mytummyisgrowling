@@ -180,8 +180,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
                 String cuisine = cuisineList.get(position);
 
                 //Add cuisine to preference list
-                preferenceList.add(new Preference(cuisine));
-                preferenceList.get(preferenceList.size() - 1).setRank(preferenceList.size());
+                preferenceList.add(new Preference(cuisine, (preferenceList.size() + 1)));
                 DragSortListView preferenceListView = (DragSortListView) findViewById(R.id.edit_preferences_layout_list);
                 PreferenceListAdapter preferenceAdapter = (PreferenceListAdapter) preferenceListView.getInputAdapter();
                 preferenceAdapter.notifyDataSetChanged();

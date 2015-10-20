@@ -1,6 +1,8 @@
 package comp4920.mytummyisgrowling;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ken on 10/13/2015.
@@ -10,8 +12,13 @@ public class LoginResponse implements Serializable{
         private boolean error;
         private int uid;
         private String email;
+    private List<Preference> prefs = new ArrayList<Preference>();
         private String errorMessage;
 
+
+    public List<Preference> getPrefs() {
+        return prefs;
+    }
         public boolean getError() {
             return error;
         }
