@@ -173,10 +173,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 // Check if the user has entered a valid address
-                if(!isValidAddress(getApplicationContext(), autoCompMessage)) {
-                    autoCompView.setError("Enter a valid address.");
-                    return;
-                }
+                //if(!isValidAddress(getApplicationContext(), autoCompMessage)) {
+                //    autoCompView.setError("Enter a valid address.");
+                //    return;
+                //}
 
                 startActivity(intent);
             }
