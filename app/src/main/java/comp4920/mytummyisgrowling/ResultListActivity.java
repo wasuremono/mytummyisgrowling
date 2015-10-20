@@ -77,6 +77,11 @@ public class ResultListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         final String latLong = intent.getStringExtra("currLatLong");
+
+        final String myLat = intent.getStringExtra("mainMyLat");
+        final String myLong = intent.getStringExtra("mainMyLong");
+        final String myLatLong = myLat + "," + myLong;
+
         final GoogleMap mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
@@ -105,7 +110,7 @@ public class ResultListActivity extends AppCompatActivity {
 
                 YelpAPI yelpApi = new YelpAPI();
                //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-                resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, latLong);
+                resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, myLatLong);
                 System.out.println("Result Body");
                 System.out.println(resultBody);
 
