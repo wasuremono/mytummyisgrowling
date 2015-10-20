@@ -42,6 +42,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.transform.Result;
@@ -89,13 +90,13 @@ public class ResultListActivity extends AppCompatActivity {
         String currLatLongList[] = currLatLong.split("\\s*,\\s*");
         String currLat = currLatLongList[0];
         String currLong = currLatLongList[1];
-        NEWARK = new LatLng(Double.parseDouble(currLat), Double.parseDouble(currLong));
+        NEWARK = new LatLng(Double.parseDouble(myLat), Double.parseDouble(myLong));
         POSITION =
                 new CameraPosition.Builder().target(NEWARK)
                         .zoom(12)
                         .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(POSITION));
-        setTitle("ListView for " + message);
+        setTitle("Results for " + message);
 
         nameValues = new ArrayList<String>();
         businessList = new ArrayList<Business>();
@@ -118,11 +119,23 @@ public class ResultListActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
 
-
+                List<String> categories = Arrays.asList(searchCuisine.split(","));
 
                 for(Business business : response.getBusinesses()) {
-                    nameValues.add(business.getName());
-                    businessList.add(business);
+                    boolean hasCategory = false;
+                    if (business.getCategories() != null) {
+                        for (List l : business.getCategories()) {
+                            for (String category : categories) {
+                                if (l.contains(category)) hasCategory = true;
+                            }
+
+                        }
+
+                        if (hasCategory) {
+                            nameValues.add(business.getName());
+                            businessList.add(business);
+                        }
+                    }
                 }
 
                 for(String business : nameValues) {

@@ -381,7 +381,7 @@ public class ChooseLocation extends AppCompatActivity implements
 
         intent.putExtra("currLatLong", currLatLong);
 
-        startActivity(intent);
+        //startActivity(intent);
     }
 
     @Override
