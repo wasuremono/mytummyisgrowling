@@ -17,7 +17,7 @@ public class LoginResponse implements Serializable{
 
 
     public List<Preference> getPrefs() {
-        return prefs;
+        return (List<Preference>) prefs;
     }
         public boolean getError() {
             return error;

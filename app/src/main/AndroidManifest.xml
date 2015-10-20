@@ -46,6 +46,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ChooseLocation"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
+        </activity>
+        <activity
             android:name=".ResultListActivity"
             android:label="@string/title_activity_result_list"
             android:launchMode="singleTop"

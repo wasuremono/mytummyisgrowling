@@ -169,19 +169,19 @@ public class AccountSettingsActivity extends Activity {
             thumbnail = (BitmapFactory.decodeFile(picturePath));
 
             resize();
-            thumbnail = Bitmap.createScaledBitmap(thumbnail, 300, 300, false);
             avatarView.setImageBitmap(thumbnail);
         }
         super.onResume();
     }
 
     private void resize() {
-        int wratio = (int) thumbnail.getWidth() / 300;
-        int hratio = (int) thumbnail.getHeight() / 300;
-        if (thumbnail.getWidth() > thumbnail.getHeight()) {
-            thumbnail = Bitmap.createScaledBitmap(thumbnail, 300, 300 / wratio, false);
-        } else {
-            thumbnail = Bitmap.createScaledBitmap(thumbnail, 300 / hratio, 300, false);
+
+        float wratio = (int) thumbnail.getWidth() / 640;
+        float hratio = (int) thumbnail.getHeight() / 800;
+        if (thumbnail.getWidth() > 640) {
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, 640, (int) (thumbnail.getHeight() / wratio), false);
+        } else if (thumbnail.getHeight() > 800) {
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, (int) (thumbnail.getWidth() / hratio), 800, false);
         }
     }
 

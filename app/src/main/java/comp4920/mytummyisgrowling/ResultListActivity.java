@@ -75,7 +75,7 @@ public class ResultListActivity extends AppCompatActivity {
 
         // Get the message from the intent
         Intent intent = getIntent();
-        final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        final String message = intent.getStringExtra(ChooseLocation.EXTRA_MESSAGE);
         final String latLong = intent.getStringExtra("currLatLong");
 
         final String myLat = intent.getStringExtra("mainMyLat");

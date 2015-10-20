@@ -11,13 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.android.volley.Request;
@@ -27,10 +28,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class EditPreferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private TextView subHeaderText;
@@ -57,6 +61,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
                         preferenceAdapter.remove(pref);
                         preferenceAdapter.insert(pref, to);
                         pref.setRank(to + 1);
+                        updateButtons();
                     }
                 }
             };
@@ -116,7 +121,15 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
         //For now, use dummy data
         cuisineList = new ArrayList<>(Arrays.asList("Select a cuisine...", "Japanese", "Chinese", "Mexican", "Thai", "Italian", "Spanish", "Lebanese", "Vietnamese", "Korean", "German", "French", "Indian"));
     /*    preferenceList = new ArrayList<>(Arrays.asList(new Preference("Japanese", 1), new Preference("Thai", 2)));*/
-        preferenceList = new ArrayList<>();
+        Gson gson = new Gson();
+        List<Preference> list = gson.fromJson(session.getUserPrefs(), new TypeToken<List<Preference>>() {
+        }.getType());
+        preferenceList = new ArrayList<Preference>();
+        for (Preference p : list) {
+            preferenceList.add(p);
+            Object o = p.getCuisine();
+            cuisineList.remove(o);
+        }
 
         updateSubHeaderText();
 
@@ -277,8 +290,15 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
 
     public void submitWithoutChanges (View view){
         //TODO: go to next activity
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void skipPrefs(View view) {
         Intent intent = new Intent(this, EatingWithActivity.class);
         startActivity(intent);
+
     }
 }
+
 

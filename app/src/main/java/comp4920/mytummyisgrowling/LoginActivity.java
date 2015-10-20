@@ -35,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,7 +175,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     if (!response.getError()) {
                         System.out.println("Logged in as " + response.getId());
                         List<Preference> p = response.getPrefs();
-                        Iterator<Preference> pIterator = p.iterator();
                         session.doLogin(response.getId(), gson.toJson(p));
                         System.out.println(session.getUserPrefs());
                         //return to MainActivity
