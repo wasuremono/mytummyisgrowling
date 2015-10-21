@@ -1,5 +1,6 @@
 package comp4920.mytummyisgrowling;
 
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -39,6 +40,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -73,6 +75,16 @@ public class ChooseLocation extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView t;
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/palacio.ttf");
+        t = (TextView) findViewById(R.id.mainCuisineTextView);
+        t.setTypeface(customFont);
+        t = (TextView) findViewById(R.id.mainCuisine);
+        t.setTypeface(customFont);
+        t = (TextView) findViewById(R.id.mainLocationTextView);
+        t.setTypeface(customFont);
+        t = (AutoCompleteTextView) findViewById(R.id.mainAutoComplete);
+        t.setTypeface(customFont);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)

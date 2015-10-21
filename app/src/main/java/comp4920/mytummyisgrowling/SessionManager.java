@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import java.util.List;
-
 /**
  * Created by Ken on 10/13/2015.
  */
@@ -45,7 +43,7 @@ public class SessionManager {
 
     public void checkLogin(){
         if(!this.isLoggedin()){
-            Intent i = new Intent(_context, LoginActivity.class);
+            Intent i = new Intent(_context, Home.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

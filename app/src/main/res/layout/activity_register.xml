@@ -3,11 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/blurryicecream"
     tools:context="comp4920.mytummyisgrowling.Register">
+
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView android:id="@+id/logo"
+            android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+        android:background="@drawable/croppedsmallerlogo"/> </RelativeLayout>
+
 
 
     <LinearLayout android:id="@+id/register_layout_username"
-        android:layout_marginTop="@dimen/register_layout_username_top_margin"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +54,6 @@
     </LinearLayout>
 
     <LinearLayout android:id="@+id/register_layout_password"
-        android:layout_marginTop="@dimen/register_layout_password_top_margin"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,7 +84,6 @@
     </LinearLayout>
 
     <LinearLayout android:id="@+id/register_layout_confirm_password"
-        android:layout_marginTop="@dimen/register_layout_password_top_margin"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,8 +98,8 @@
             android:hint="@string/register_confirm_password"/>
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/register_layout_button"
-        android:layout_marginTop="@dimen/register_layout_button_top_margin"
+    <RelativeLayout android:id="@+id/register_layout_button"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="@dimen/register_edit_text_width"
         android:layout_height="wrap_content"
@@ -99,11 +107,12 @@
         android:gravity="end">
 
         <Button android:id="@+id/register_credentials_next_button"
-            android:layout_height="wrap_content"
+            android:layout_height="75dp"
             android:layout_width="wrap_content"
-            android:text="@string/register_credentials_next_button"
+            android:layout_centerHorizontal="true"
             android:clickable="false"
+            android:background="@drawable/register"
             android:enabled="false"
             android:onClick="acceptCredentials"/>
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

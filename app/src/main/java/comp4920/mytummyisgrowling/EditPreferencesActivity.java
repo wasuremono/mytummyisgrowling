@@ -1,6 +1,7 @@
 package comp4920.mytummyisgrowling;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,7 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -108,6 +111,11 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
         //Get TextViews from layout
         subHeaderText =  (TextView) findViewById(R.id.edit_preferences_sub_header_text);
         errorHintText = (TextView) findViewById(R.id.edit_preferences_error_hint);
+
+//        TextView t;
+//        t = (TextView) findViewById(R.id.edit_preferences_sub_header_text);
+//        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/palacio.ttf");
+//        t.setTypeface(customFont);
 
         //Get Buttons from layout
         skipButton = (Button) findViewById(R.id.edit_preferences_skip_button);
