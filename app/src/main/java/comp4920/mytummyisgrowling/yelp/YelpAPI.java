@@ -90,7 +90,7 @@ public class YelpAPI {
 
   public String searchForBusinessesByLatLong(String searchCuisine, String latLong) {
     OAuthRequest request = createOAuthRequest(SEARCH_PATH);
-    request.addQuerystringParameter("term", searchCuisine);
+    request.addQuerystringParameter("term", searchCuisine + " restaurant");
     request.addQuerystringParameter("ll", latLong);
     request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
     return sendRequestAndGetResponse(request);

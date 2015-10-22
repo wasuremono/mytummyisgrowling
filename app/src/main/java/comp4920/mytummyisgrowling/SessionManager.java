@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
 /**
  * Created by Ken on 10/13/2015.
  */
@@ -22,22 +23,27 @@ public class SessionManager {
     private static final String PREF_NAME = "MTIGPref";
     private static final String isLogin = "isLoggedin";
     private static final String userId = "userID";
+    private static final String userPrefs = "userPref";
+    private static final String avatarPath = "userAvatar";
 
-    public void doLogin(int id) {
-        editor.putBoolean(isLogin,true);
+    public void doLogin(int id, String prefs) {
+        editor.putBoolean(isLogin, true);
         editor.putInt(userId, id);
+        editor.putString(userPrefs, prefs);
         editor.commit();
+
     }
 
     public void doLogout(){
-        editor.putBoolean(isLogin,false);
+        editor.putBoolean(isLogin, false);
+        editor.putString(avatarPath, "");
         editor.commit();
         checkLogin();
     }
 
     public void checkLogin(){
         if(!this.isLoggedin()){
-            Intent i = new Intent(_context, LoginActivity.class);
+            Intent i = new Intent(_context, Home.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -45,6 +51,15 @@ public class SessionManager {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // Staring Login Activity
+            _context.startActivity(i);
+        } else {
+            Intent i = new Intent(_context, Search.class);
+            // Closing all the Activities
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            // Add new Flag to start new Activity
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             _context.startActivity(i);
         }
     }
@@ -55,5 +70,18 @@ public class SessionManager {
 
     public int getId() {
         return pref.getInt(userId, 0);
+    }
+
+    public void setAvatarPath(String filePath) {
+        editor.putString(avatarPath, filePath);
+        editor.commit();
+    }
+
+    public String getUserPrefs() {
+        return pref.getString(userPrefs, "");
+    }
+
+    public String getAvatarpath() {
+        return pref.getString(avatarPath, "");
     }
 }

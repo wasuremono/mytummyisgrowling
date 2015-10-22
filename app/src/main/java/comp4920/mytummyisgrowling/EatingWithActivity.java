@@ -22,4 +22,6 @@ public class EatingWithActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GroupSelect.class);
         startActivity(intent);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package comp4920.mytummyisgrowling;
 
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -7,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,6 +41,18 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        TextView t;
+        t = (EditText) findViewById(R.id.register_enter_username);
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/palacio.ttf");
+        t.setTypeface(customFont);
+        t = (TextView) findViewById(R.id.register_username_hint);
+        t.setTypeface(customFont);
+        t = (EditText) findViewById(R.id.register_enter_password);
+        t.setTypeface(customFont);
+        t = (TextView) findViewById(R.id.register_password_hint);
+        t.setTypeface(customFont);
+        t = (EditText) findViewById(R.id.register_confirm_password);
+        t.setTypeface(customFont);
 
         credentials = new EditText[]{(EditText) findViewById(R.id.register_enter_username),
                 (EditText) findViewById(R.id.register_enter_password),

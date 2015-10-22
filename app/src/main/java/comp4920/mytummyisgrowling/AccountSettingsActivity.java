@@ -1,5 +1,6 @@
 package comp4920.mytummyisgrowling;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,14 +32,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AccountSettingsActivity extends Activity {
     private ImageView avatarView;
     public static final String PREFS_NAME = "MyPrefs";
     private String picturePath;
+    private SessionManager session;
+    private Bitmap thumbnail;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+        session = new SessionManager(getApplicationContext());
         setContentView(R.layout.activity_account_settings);
         avatarView = (ImageView) findViewById(R.id.avatar_view);
         avatarView.setOnClickListener(new OnClickListener() {
@@ -48,8 +67,59 @@ public class AccountSettingsActivity extends Activity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), 1);
+
             }
         });
+        Button saveButton = (Button) findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                updateAvatar();
+
+            }
+        });
+    }
+
+    private void updateAvatar() {
+        dialog.setMessage("Uploading Avatar");
+        dialog.show();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        final byte[] byteArray = byteArrayOutputStream.toByteArray();
+        final String image_str = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_UPLOADAVATAR, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String s) {
+                //System.out.println("Sent " + s + " bytes.");
+                dialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.dismiss();
+                System.out.println("That didn't work!");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user", String.valueOf(session.getId()));
+                params.put("data", image_str);
+
+                return params;
+            }
+
+
+        };
+// Add the request to the RequestQueue.
+        queue.add(strReq);
+
+
     }
 
     @Override
@@ -83,12 +153,10 @@ public class AccountSettingsActivity extends Activity {
                 ;
                 picturePath = getPath(selectedImage);
                 System.out.println(picturePath);
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                thumbnail = (BitmapFactory.decodeFile(picturePath));
+                resize();
                 avatarView.setImageBitmap(thumbnail);
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("avatarPath", picturePath);
-                editor.commit();
+                session.setAvatarPath(picturePath);
             }
         }
     }
@@ -96,13 +164,25 @@ public class AccountSettingsActivity extends Activity {
 
     @Override
     protected void onResume() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        picturePath = settings.getString("avatarPath", "");
-        if (picturePath != null) {
-            Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+        picturePath = session.getAvatarpath();
+        if (picturePath != "") {
+            thumbnail = (BitmapFactory.decodeFile(picturePath));
+
+            resize();
             avatarView.setImageBitmap(thumbnail);
         }
         super.onResume();
+    }
+
+    private void resize() {
+
+        float wratio = (int) thumbnail.getWidth() / 640;
+        float hratio = (int) thumbnail.getHeight() / 800;
+        if (thumbnail.getWidth() > 640) {
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, 640, (int) (thumbnail.getHeight() / wratio), false);
+        } else if (thumbnail.getHeight() > 800) {
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, (int) (thumbnail.getWidth() / hratio), 800, false);
+        }
     }
 
     public String getPath(Uri uri) {

@@ -22,7 +22,7 @@ public class Search extends AppCompatActivity {
     }
 
     public void chooseMyOwn (View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ChooseLocation.class);
         startActivity(intent);
     }
 

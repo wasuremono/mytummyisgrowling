@@ -1,1 +1,1 @@
-include ':libraries:drag-sort-listview:library', ':app', ':libraries'
+include ':app', ':libraries', ':libraries:drag-sort-listview:library'

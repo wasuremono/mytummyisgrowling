@@ -112,6 +112,14 @@ class DB_Functions {
     
     }
     
+    public function getPrefs($id){
+        $q = $this->conn->prepare("SELECT cuisine,rank from userprefs WHERE (user = ? AND cuisine != '') ORDER BY rank asc");
+        $q->bind_param("s",$id);
+        $q->execute();
+        $prefs = $q->get_result()->fetch_all($resulsttype = MYSQLI_ASSOC);
+        return $prefs;
+    }
+    
 }
  
 ?>

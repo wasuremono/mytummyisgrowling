@@ -15,10 +15,13 @@ if (isset($_POST['email'])){
         $user = $db->verifyUser($email, $password);
     
         if ($user != false) {
-            // use is found
+            // user is found
+            // Get their preferences
+            $prefs = $db->getPrefs($user["id"]);
             $response["error"] = FALSE;
             $response["uid"] = $user["id"];
             $response["email"] = $user["email"];
+            $response["prefs"] = $prefs;
             $response["errorMessage"] = "";
             #$response["user"]["created_at"] = $user["created_at"];
             #$response["user"]["updated_at"] = $user["updated_at"];

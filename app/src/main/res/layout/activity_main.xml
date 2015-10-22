@@ -1,19 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@drawable/blurryicecream">
 
     <Button
         android:id="@+id/send_main"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SEARCH"
-        android:onClick="sendMessage"
+        android:layout_height="75dp"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:background="@drawable/searchlong"
+        android:onClick="sendMessage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +19,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="1. Enter a cuisine."
         android:id="@+id/mainCuisineTextView"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/send_main"
@@ -34,7 +32,6 @@
         android:layout_below="@+id/mainCuisineTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/send_main"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Enter a restaurant name, meal, cuisine etc." />
@@ -65,48 +62,22 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current Location"
+        android:layout_height="75dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/currentlocation"
         android:id="@+id/mainCurrLocButton"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/mainLocationTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="3. Who are you eating with?"
-        android:id="@+id/mainGroupTextView"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+ />
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ALONE"
-        android:id="@+id/mainAloneButton"
-        android:layout_below="@+id/mainGroupTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GROUP"
-        android:id="@+id/mainGroupButton"
-        android:layout_below="@+id/mainAloneButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_height="75dp"
+        android:id="@+id/mainOwnLocButton"
+        android:background="@drawable/gowithmyownlocation"
+        android:layout_below="@id/mainAutoComplete"
+        android:layout_centerHorizontal="true"
+ />
 
 </RelativeLayout>
 

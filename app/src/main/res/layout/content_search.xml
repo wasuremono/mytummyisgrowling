@@ -11,21 +11,23 @@
     tools:showIn="@layout/activity_search" tools:context="comp4920.mytummyisgrowling.Search">
 
     <Button
+        android:layout_marginTop="150dp"
         android:layout_width="200dp"
         android:layout_height="75dp"
         android:id="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/searchbypreference"
+        android:background="@drawable/searchbypreferencenew"
         android:onClick="searchByPreference"
         />
 
     <Button
+        android:layout_marginTop="50dp"
         android:layout_width="200dp"
         android:layout_height="75dp"
         android:id="@+id/chooseOwnButton"
         android:layout_below="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/choosemyown"
+        android:background="@drawable/choosemyownnew"
         android:onClick="chooseMyOwn"
         />
 

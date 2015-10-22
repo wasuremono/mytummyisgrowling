@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">mytummyisgrowling</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_yelp_request">YelpRequestActivity</string>
+    <string name="title_activity_yelp_request">Yelp Request</string>
 
 
     <string name="title_activity_main">mytummyisgrowling</string>
@@ -12,11 +12,11 @@
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
     <string name="title_activity_display_message">My Message</string>
-    <string name="title_activity_result_list">ResultListActivity</string>
+    <string name="title_activity_result_list">Results </string>
     <string name="title_activity_result_details">ResultDetailsActivity</string>
 
     <string name="title_activity_register">Register</string>
-    <string name="register_enter_username">Enter Username</string>
+    <string name="register_enter_username">Enter Email</string>
     <string name="register_enter_username_hint">(Min. 6 characters)</string>
     <string name="register_username_taken">Sorry, that username is taken.</string>
     <string name="register_username_available">That username is available.</string>
@@ -40,16 +40,14 @@
     <string name="group_select_join_group_button">Join Group</string>
     <string name="group_select_view_group_details_button">View Group Details</string>
 
-
-    <string name="title_activity_maps_from_list">MapsFromListActivity</string>
-    <string name="title_activity_account_settings">AccountSettingsActivity</string>
-    <string name="title_activity_search">Search</string>
-    <string name="title_activity_eat_alone">EatAlone</string>
-    <string name="title_activity_create_group">CreateGroup</string>
-    <string name="title_activity_join_group">JoinGroup</string>
-
-    <string name="title_activity_group_details">GroupDetails</string>
+    <string name="title_activity_group_details">Group Details</string>
     <string name="group_details_use_group_button">Use this Group</string>
 
+    <string name="title_activity_maps_from_list">Maps</string>
+    <string name="title_activity_account_settings">Account Settings</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_eat_alone">Eat Alone</string>
+    <string name="title_activity_create_group">Create Group</string>
+    <string name="title_activity_join_group">Join Group</string>
 </resources>
 

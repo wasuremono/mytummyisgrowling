@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="comp4920.mytummyisgrowling" >
+<manifest
+    package="comp4920.mytummyisgrowling"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -45,6 +46,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ChooseLocation"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
+        </activity>
+        <activity
             android:name=".ResultListActivity"
             android:label="@string/title_activity_result_list"
             android:launchMode="singleTop"
@@ -73,21 +83,19 @@
             android:label="@string/title_activity_maps_from_list" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Home"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="stateVisible|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AccountSettingsActivity"
             android:label="@string/title_activity_account_settings"
             android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="comp4920.mytummyisgrowling.MainActivity" />
-        </activity>
-        <activity
-            android:name=".Home"
-            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="comp4920.mytummyisgrowling.MainActivity" />

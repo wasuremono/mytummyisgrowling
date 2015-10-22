@@ -1,6 +1,7 @@
 package comp4920.mytummyisgrowling;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,16 +9,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.android.volley.Request;
@@ -27,10 +31,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
 
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class EditPreferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private TextView subHeaderText;
@@ -57,6 +64,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
                         preferenceAdapter.remove(pref);
                         preferenceAdapter.insert(pref, to);
                         pref.setRank(to + 1);
+                        updateButtons();
                     }
                 }
             };
@@ -104,6 +112,11 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
         subHeaderText =  (TextView) findViewById(R.id.edit_preferences_sub_header_text);
         errorHintText = (TextView) findViewById(R.id.edit_preferences_error_hint);
 
+//        TextView t;
+//        t = (TextView) findViewById(R.id.edit_preferences_sub_header_text);
+//        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/palacio.ttf");
+//        t.setTypeface(customFont);
+
         //Get Buttons from layout
         skipButton = (Button) findViewById(R.id.edit_preferences_skip_button);
         discardChangesButton = (Button) findViewById(R.id.edit_preferences_discard_changes_button);
@@ -116,7 +129,15 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
         //For now, use dummy data
         cuisineList = new ArrayList<>(Arrays.asList("Select a cuisine...", "Japanese", "Chinese", "Mexican", "Thai", "Italian", "Spanish", "Lebanese", "Vietnamese", "Korean", "German", "French", "Indian"));
     /*    preferenceList = new ArrayList<>(Arrays.asList(new Preference("Japanese", 1), new Preference("Thai", 2)));*/
-        preferenceList = new ArrayList<>();
+        Gson gson = new Gson();
+        List<Preference> list = gson.fromJson(session.getUserPrefs(), new TypeToken<List<Preference>>() {
+        }.getType());
+        preferenceList = new ArrayList<Preference>();
+        for (Preference p : list) {
+            preferenceList.add(p);
+            Object o = p.getCuisine();
+            cuisineList.remove(o);
+        }
 
         for (Preference p: preferenceList) {
             String cuisine = p.getCuisine();
@@ -186,8 +207,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
                 String cuisine = cuisineList.get(position);
 
                 //Add cuisine to preference list
-                preferenceList.add(new Preference(cuisine));
-                preferenceList.get(preferenceList.size() - 1).setRank(preferenceList.size());
+                preferenceList.add(new Preference(cuisine, (preferenceList.size() + 1)));
                 DragSortListView preferenceListView = (DragSortListView) findViewById(R.id.edit_preferences_layout_list);
                 PreferenceListAdapter preferenceAdapter = (PreferenceListAdapter) preferenceListView.getInputAdapter();
                 preferenceAdapter.notifyDataSetChanged();
@@ -284,8 +304,15 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
 
     public void submitWithoutChanges (View view){
         //TODO: go to next activity
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void skipPrefs(View view) {
         Intent intent = new Intent(this, EatingWithActivity.class);
         startActivity(intent);
+
     }
 }
+
 

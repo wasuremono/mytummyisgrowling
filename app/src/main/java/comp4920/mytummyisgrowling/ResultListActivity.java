@@ -1,7 +1,9 @@
 package comp4920.mytummyisgrowling;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -42,6 +44,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.transform.Result;
@@ -60,23 +63,29 @@ public class ResultListActivity extends AppCompatActivity {
     private CameraPosition POSITION;
     private int finalHeight;
     private int finalWidth;
-
     private String currLatLong;
 
     private ImageView detailsListStaticMapImageView;
+    private ProgressDialog dialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_list);
+        dialog = ProgressDialog.show(this, "", "Searching...", true);
 
 
 
         // Get the message from the intent
         Intent intent = getIntent();
-        final String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        final String message = intent.getStringExtra(ChooseLocation.EXTRA_MESSAGE);
         final String latLong = intent.getStringExtra("currLatLong");
+
+        final String myLat = intent.getStringExtra("mainMyLat");
+        final String myLong = intent.getStringExtra("mainMyLong");
+        final String myLatLong = myLat + "," + myLong;
+
         final GoogleMap mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
@@ -84,13 +93,13 @@ public class ResultListActivity extends AppCompatActivity {
         String currLatLongList[] = currLatLong.split("\\s*,\\s*");
         String currLat = currLatLongList[0];
         String currLong = currLatLongList[1];
-        NEWARK = new LatLng(Double.parseDouble(currLat), Double.parseDouble(currLong));
+        NEWARK = new LatLng(Double.parseDouble(myLat), Double.parseDouble(myLong));
         POSITION =
                 new CameraPosition.Builder().target(NEWARK)
                         .zoom(12)
                         .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(POSITION));
-        setTitle("ListView for " + message);
+        setTitle("Results for " + message);
 
         nameValues = new ArrayList<String>();
         businessList = new ArrayList<Business>();
@@ -102,28 +111,36 @@ public class ResultListActivity extends AppCompatActivity {
             public void run() {
                 String resultBody;
                 String searchCuisine = message;
-
+                Gson gson = new Gson();
+                List<String> categories = Arrays.asList(searchCuisine.split(","));
                 YelpAPI yelpApi = new YelpAPI();
                //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-                resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, latLong);
-                System.out.println("Result Body");
-                System.out.println(resultBody);
+                int limit = 30 / categories.size();
+                for (String category : categories) {
+                    int thisCat = 0;
+                    resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
+                    System.out.println("Result Body");
+                    System.out.println(resultBody);
+                    searchResult = resultBody;
+                    SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
+                    for (Business business : response.getBusinesses()) {
+                        boolean hasCategory = false;
+                        if (business.getCategories() != null) {
+                            for (List l : business.getCategories()) {
+                                if (l.contains(category)) hasCategory = true;
 
-                searchResult = resultBody;
-                Gson gson = new Gson();
-                SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
+                            }
 
-
-
-                for(Business business : response.getBusinesses()) {
-                    nameValues.add(business.getName());
-                    businessList.add(business);
+                            if (hasCategory && (thisCat++ < limit)) {
+                                nameValues.add(business.getName());
+                                businessList.add(business);
+                            }
+                        }
+                    }
                 }
-
                 for(String business : nameValues) {
                     System.out.println(business);
                 }
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -156,7 +173,7 @@ public class ResultListActivity extends AppCompatActivity {
 
                         ListView listView = (ListView) findViewById(R.id.resultListView);
                         listView.setAdapter(resultListAdapter);
-
+                        dialog.dismiss();
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -192,80 +209,79 @@ public class ResultListActivity extends AppCompatActivity {
                             }
                         });
                         /**
-                        final ImageView iv = (ImageView)findViewById(R.id.resultListStaticMap);
+                         final ImageView iv = (ImageView)findViewById(R.id.resultListStaticMap);
 
-                        iv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                         iv.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
 
-                                String currLatLong = latLong;
-                                String currLatLongList[] = currLatLong.split("\\s*,\\s*");
-                                String currLat = currLatLongList[0];
-                                String currLong = currLatLongList[1];
+                        String currLatLong = latLong;
+                        String currLatLongList[] = currLatLong.split("\\s*,\\s*");
+                        String currLat = currLatLongList[0];
+                        String currLong = currLatLongList[1];
 
-                                Intent sendBusinessList = new Intent(getResultListActivity(), MapsFromListActivity.class);
-                                sendBusinessList.putExtra("sentLatBusinessList", currLat);
-                                sendBusinessList.putExtra("sentLongBusinessList", currLong);
-                                sendBusinessList.putExtra("sentBusinessList", businessList);
-                                startActivity(sendBusinessList);
-                            }
+                        Intent sendBusinessList = new Intent(getResultListActivity(), MapsFromListActivity.class);
+                        sendBusinessList.putExtra("sentLatBusinessList", currLat);
+                        sendBusinessList.putExtra("sentLongBusinessList", currLong);
+                        sendBusinessList.putExtra("sentBusinessList", businessList);
+                        startActivity(sendBusinessList);
+                        }
                         });
 
 
-                        final ViewTreeObserver vto = iv.getViewTreeObserver();
-                        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                            public boolean onPreDraw() {
-                                finalHeight = iv.getMeasuredHeight();
-                                finalWidth = iv.getMeasuredWidth();
+                         final ViewTreeObserver vto = iv.getViewTreeObserver();
+                         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                         public boolean onPreDraw() {
+                         finalHeight = iv.getMeasuredHeight();
+                         finalWidth = iv.getMeasuredWidth();
 
-                             //   System.out.println("current final Height in listView is: " + finalHeight);
-                             //   System.out.println("current final Wdith in listView is: " + finalWidth);
+                         //   System.out.println("current final Height in listView is: " + finalHeight);
+                         //   System.out.println("current final Wdith in listView is: " + finalWidth);
 
-                               // String link = "http://lovemeow.com/wp-content/uploads/2013/05/gLcOq-Imgur.jpg";
+                         // String link = "http://lovemeow.com/wp-content/uploads/2013/05/gLcOq-Imgur.jpg";
 
-                                detailsListStaticMapImageView = (ImageView) getResultListActivity().findViewById(R.id.resultListStaticMap);
+                         detailsListStaticMapImageView = (ImageView) getResultListActivity().findViewById(R.id.resultListStaticMap);
 
-                                StringBuffer mapURLBuffer = new StringBuffer("https://maps.googleapis.com/maps/api/staticmap?center=");
-                                // Add user's last known location coordinates
-                                // as centre of map.
-                                mapURLBuffer.append(latLong);
-                                mapURLBuffer.append("&zoom=13");
-                                mapURLBuffer.append("&size=");
-                                mapURLBuffer.append(finalWidth + "x" + finalHeight);
+                         StringBuffer mapURLBuffer = new StringBuffer("https://maps.googleapis.com/maps/api/staticmap?center=");
+                         // Add user's last known location coordinates
+                         // as centre of map.
+                         mapURLBuffer.append(latLong);
+                         mapURLBuffer.append("&zoom=13");
+                         mapURLBuffer.append("&size=");
+                         mapURLBuffer.append(finalWidth + "x" + finalHeight);
 
-                                // %7C  =  |     (pipe)
-                                // Start adding markers of restaurants.
-                                mapURLBuffer.append("&markers=color:green%7C");
-                                mapURLBuffer.append("label:A%7C");
-                                mapURLBuffer.append(latLong);
-
-
-                             //   String listMarkers = "";
-                              //  mapURLBuffer.append("&markers=color:red");
-                                for(int i = 0; i < businessList.size(); i++) {
-                                    String markerString = "&markers=color:red%7Clabel:" + i + "%7C";
-                                    mapURLBuffer.append(markerString);
-                                    Business currBus = businessList.get(i);
-
-                                    double latitude = currBus.getLocation().getCoordinate().getLatitude();
-                                    double longitude = currBus.getLocation().getCoordinate().getLongitude();
-                                    String busLatLong = latitude + "," + longitude;
-                                    mapURLBuffer.append(busLatLong);
-                                    // markerString = markerString + busLatLong;
-                              //      System.out.println("markerString: " + markerString);
-                                    //listMarkers = markerString;
-
-                                }
-
-                            //    mapURLBuffer.append(listMarkers);
-                           //     System.out.println("mapURLBuffer: " + mapURLBuffer);
-
-                                Picasso.with(getResultListActivity()).load(mapURLBuffer.toString()).into(detailsListStaticMapImageView);
+                         // %7C  =  |     (pipe)
+                         // Start adding markers of restaurants.
+                         mapURLBuffer.append("&markers=color:green%7C");
+                         mapURLBuffer.append("label:A%7C");
+                         mapURLBuffer.append(latLong);
 
 
-                                return true;
-                            }
-                        });
+                         //   String listMarkers = "";
+                         //  mapURLBuffer.append("&markers=color:red");
+                         for(int i = 0; i < businessList.size(); i++) {
+                         String markerString = "&markers=color:red%7Clabel:" + i + "%7C";
+                         mapURLBuffer.append(markerString);
+                         Business currBus = businessList.get(i);
+
+                         double latitude = currBus.getLocation().getCoordinate().getLatitude();
+                         double longitude = currBus.getLocation().getCoordinate().getLongitude();
+                         String busLatLong = latitude + "," + longitude;
+                         mapURLBuffer.append(busLatLong);
+                         // markerString = markerString + busLatLong;
+                         //      System.out.println("markerString: " + markerString);
+                         //listMarkers = markerString;
+
+                         }
+
+                         //    mapURLBuffer.append(listMarkers);
+                         //     System.out.println("mapURLBuffer: " + mapURLBuffer);
+
+                         Picasso.with(getResultListActivity()).load(mapURLBuffer.toString()).into(detailsListStaticMapImageView);
+
+
+                         return true;
+                         }
+                         });
                          **/
                     }
                 });

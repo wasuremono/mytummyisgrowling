@@ -12,4 +12,7 @@ public class AppConfig {
 
     // Server user register url
     public static String URL_EDITPREF = "http://60.240.39.122:8080/login_api/editPrefs.php";
+
+    // Server avatar upload url
+    public static String URL_UPLOADAVATAR = "http://60.240.39.122:8080/login_api/avatar.php";
 }
