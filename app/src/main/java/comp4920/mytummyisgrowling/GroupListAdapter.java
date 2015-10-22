@@ -27,19 +27,15 @@ class Group {
     private ArrayList<Integer> memberIds;
     private boolean selected;
 
-    public Group(int id, String name, String pass, String leaderName, int leaderId){
+    public Group(int id, String name, String pass, String idString, String leaderName, int leaderId){
         this.id = id;
         this.name = name;
-        this.idString = generateIdString();
+        this.idString = idString;
         this.pass= pass;
         this.leaderId = leaderId;
         this.leaderName = leaderName;
         this.memberIds = new ArrayList<>();
         selected = false;
-    }
-
-    private String generateIdString(){
-        return this.name + Integer.toString(this.id);
     }
 
     public void addMemberId(int id) {
@@ -52,7 +48,6 @@ class Group {
 
     public void setId(int id) {
         this.id =id;
-        this.idString = generateIdString();
     }
 
     public String getName() {
@@ -61,7 +56,6 @@ class Group {
 
     public void setName(String name) {
         this.name = name;
-        this.idString = generateIdString();
     }
 
     public String getIdString() {

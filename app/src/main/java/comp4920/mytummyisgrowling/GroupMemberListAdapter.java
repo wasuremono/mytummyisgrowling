@@ -48,6 +48,10 @@ class GroupMember {
         this.name = name;
     }
 
+    public void toggleChecked(){
+        this.checked = !this.checked;
+    }
+
     public boolean isChecked() {
         return checked;
     }
@@ -86,12 +90,13 @@ public class GroupMemberListAdapter extends ArrayAdapter<GroupMember> {
         TextView memberName = (TextView) row.findViewById(R.id.row_group_member_name);
         CheckBox cb = (CheckBox) row.findViewById(R.id.row_group_member_checkbox);
 
+        cb.setOnCheckedChangeListener((GroupDetails) context);
         GroupMember gM = groupMemberList.get(position);
-        memberName.setText(gM.getName());
-        if(gM.isChecked())
+        /*if(gM.isChecked())
             cb.setChecked(true);
         else
-            cb.setChecked(false);
+            cb.setChecked(false);*/
+        memberName.setText(gM.getName());
 
         return row;
     }

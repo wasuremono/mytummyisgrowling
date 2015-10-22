@@ -47,6 +47,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity {
+    public final static String CHOOSE_OWN_SEARCH = "comp4920.mytummyisgrowling.CHOOSE_OWN_SEARCH";
+    public final static String PREFERENCE_SEARCH = "comp4920.mytummyisgrowling.PREFERENCE_SEARCH";
+    public final static String GROUP_PREFERENCE_SEARCH = "comp4920.mytummyisgrowling.GROUP_PREFERENCE_SEARCH";
 
     SessionManager session;
 

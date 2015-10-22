@@ -176,7 +176,7 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_preferences, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -189,7 +189,10 @@ public class EditPreferencesActivity extends AppCompatActivity implements Adapte
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.action_logout) {
+            session.doLogout();
         }
 
         return super.onOptionsItemSelected(item);

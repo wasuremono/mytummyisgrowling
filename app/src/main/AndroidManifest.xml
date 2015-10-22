@@ -139,10 +139,10 @@
         <activity
             android:name=".EditPreferencesActivity"
             android:label="@string/title_activity_edit_preferences"
-            android:parentActivityName="Search">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="comp4920.mytummyisgrowling.Search" />
+                android:value="comp4920.mytummyisgrowling.MainActivity" />
         </activity>
     </application>
 

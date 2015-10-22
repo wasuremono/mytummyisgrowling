@@ -43,11 +43,23 @@
     <string name="title_activity_group_details">Group Details</string>
     <string name="group_details_use_group_button">Use this Group</string>
 
+    <string name="title_activity_create_group">Create Group</string>
+    <string name="create_group_enter_name">Enter a group name</string>
+    <string name="create_group_enter_name_hint">(Min. 6 characters)</string>
+    <string name="create_group_enter_pass">Enter a password</string>
+    <string name="create_group_enter_pass_hint">(Min. 8 characters)</string>
+    <string name="create_group_confirm_pass">Confirm password</string>
+
+    <string name="title_activity_join_group">Join Group</string>
+    <string name="join_group_enter_idString">Enter Group Id</string>
+    <string name="join_group_idString_not_exist">Group Id does not exist.</string>
+    <string name="join_group_pass_incorrect">Password is incorrect.</string>
+
     <string name="title_activity_maps_from_list">Maps</string>
     <string name="title_activity_account_settings">Account Settings</string>
-    <string name="title_activity_search">Search</string>
+    <string name="title_activity_search">My Tummy is Growling</string>
     <string name="title_activity_eat_alone">Eat Alone</string>
-    <string name="title_activity_create_group">Create Group</string>
-    <string name="title_activity_join_group">Join Group</string>
+
+
 </resources>
 

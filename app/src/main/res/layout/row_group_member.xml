@@ -12,7 +12,7 @@
         android:id="@+id/row_group_member_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""/>
+        android:text="" />
     <TextView
         android:id="@+id/row_group_member_name"
         android:layout_width="wrap_content"
