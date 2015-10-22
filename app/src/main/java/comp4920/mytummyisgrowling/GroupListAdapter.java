@@ -2,11 +2,13 @@ package comp4920.mytummyisgrowling;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,41 +18,41 @@ import java.util.ArrayList;
  */
 
 class Group {
-    private String id;
+    private int id;
     private String name;
+    private String idString;
     private String pass;
-    private String leaderName;
     private int leaderId;
+    private String leaderName;
     private ArrayList<Integer> memberIds;
+    private boolean selected;
 
-    public ArrayList<Integer> getMemberIds() {
-        return memberIds;
-    }
-
-    public void setMemberIds(ArrayList<Integer> memberIds) {
-        this.memberIds = memberIds;
-    }
-
-    public Group(String name, String pass, String leaderName, int leaderId){
+    public Group(int id, String name, String pass, String leaderName, int leaderId){
+        this.id = id;
         this.name = name;
+        this.idString = generateIdString();
         this.pass= pass;
-        this.leaderName = leaderName;
         this.leaderId = leaderId;
+        this.leaderName = leaderName;
         this.memberIds = new ArrayList<>();
-        addMemberId(leaderId);
-        //TODO: Generate group Id
+        selected = false;
+    }
+
+    private String generateIdString(){
+        return this.name + Integer.toString(this.id);
     }
 
     public void addMemberId(int id) {
         this.memberIds.add(id);
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id =id;
+        this.idString = generateIdString();
     }
 
     public String getName() {
@@ -59,6 +61,11 @@ class Group {
 
     public void setName(String name) {
         this.name = name;
+        this.idString = generateIdString();
+    }
+
+    public String getIdString() {
+        return idString;
     }
 
     public String getPass() {
@@ -69,14 +76,6 @@ class Group {
         this.pass = pass;
     }
 
-    public String getLeaderName() {
-        return leaderName;
-    }
-
-    public void setLeaderName(String leaderName) {
-        this.leaderName = leaderName;
-    }
-
     public int getLeaderId() {
         return leaderId;
     }
@@ -85,11 +84,46 @@ class Group {
         this.leaderId = leaderId;
     }
 
+    public void setIdString(String idString) {
+        this.idString = idString;
+    }
+
+    public String getLeaderName() {
+        return leaderName;
+    }
+
+    public void setLeaderName(String leaderName) {
+        this.leaderName = leaderName;
+    }
+
+    public ArrayList<Integer> getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(ArrayList<Integer> memberIds) {
+        this.memberIds = memberIds;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }
+
+
 public class GroupListAdapter extends ArrayAdapter<Group> {
     private Context context;
     private int resource;
     private ArrayList<Group> groupList;
+
+  /*  private static class ViewHolder {
+        LinearLayout itemContainer;
+        TextView groupName;
+        TextView groupLeaderName;
+    }*/
 
     public GroupListAdapter(Context context, int resource, ArrayList<Group> groupList){
         super(context, resource, groupList);
@@ -114,16 +148,54 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater=
-                ((Activity) context).getLayoutInflater();
-        View item=inflater.inflate(resource, parent, false);
 
+        LayoutInflater inflater =
+                ((Activity) context).getLayoutInflater();
+        View item = inflater.inflate(resource, parent, false);
+
+        LinearLayout itemContainer = (LinearLayout) item.findViewById(R.id.grid_item_container);
         TextView groupName = (TextView) item.findViewById(R.id.grid_item_group_name);
-        TextView groupLeader = (TextView) item.findViewById(R.id.grid_item_group_leader_name);
+        TextView groupLeaderName = (TextView) item.findViewById(R.id.grid_item_group_leader_name);
 
         Group g = groupList.get(position);
         groupName.setText(g.getName());
-        groupLeader.setText(g.getLeaderName());
+        groupLeaderName.setText(g.getLeaderName());
+        if(g.isSelected())
+            itemContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.wallet_highlighted_text_holo_light));
+
         return item;
     }
 }
+
+
+
+/*
+View item;
+ViewHolder viewHolder;
+if(convertView == null) {
+        viewHolder = new ViewHolder();
+        LayoutInflater inflater =
+        ((Activity) context).getLayoutInflater();
+        item = inflater.inflate(resource, parent, false);
+
+        viewHolder.groupName = (TextView) item.findViewById(R.id.grid_item_group_name);
+        viewHolder.groupLeaderName = (TextView) item.findViewById(R.id.grid_item_group_leader_name);
+        item.setTag(viewHolder);
+        } else {
+        item = convertView;
+        viewHolder = (ViewHolder) convertView.getTag();
+        }
+        LinearLayout itemContainer = (LinearLayout) item.findViewById(R.id.grid_item_container);
+        */
+/*LinearLayout itemContainer = (LinearLayout) item.findViewById(R.id.grid_item_container);
+        TextView groupName = (TextView) item.findViewById(R.id.grid_item_group_name);
+        TextView groupLeader = (TextView) item.findViewById(R.id.grid_item_group_leader_name);
+*//*
+
+        Group g = groupList.get(position);
+        viewHolder.groupName.setText(g.getName());
+        viewHolder.groupLeaderName.setText(g.getLeaderName());
+        if(g.isSelected())
+        itemContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.wallet_highlighted_text_holo_light));
+
+        return item;*/

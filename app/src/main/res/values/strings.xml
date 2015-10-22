@@ -38,14 +38,18 @@
 
     <string name="group_select_create_group_button">Create Group</string>
     <string name="group_select_join_group_button">Join Group</string>
-    <string name="group_select_select_group_button">Select Group</string>
+    <string name="group_select_view_group_details_button">View Group Details</string>
+
+
     <string name="title_activity_maps_from_list">MapsFromListActivity</string>
     <string name="title_activity_account_settings">AccountSettingsActivity</string>
     <string name="title_activity_search">Search</string>
     <string name="title_activity_eat_alone">EatAlone</string>
     <string name="title_activity_create_group">CreateGroup</string>
     <string name="title_activity_join_group">JoinGroup</string>
+
     <string name="title_activity_group_details">GroupDetails</string>
+    <string name="group_details_use_group_button">Use this Group</string>
 
 </resources>
 
