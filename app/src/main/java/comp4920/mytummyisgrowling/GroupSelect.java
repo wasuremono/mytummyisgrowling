@@ -10,12 +10,20 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GroupSelect extends AppCompatActivity {
     public final static String GROUP_ID = "comp4920.mytummyisgrowling.GROUP_ID";
@@ -28,19 +36,10 @@ public class GroupSelect extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_select);
-        session = new SessionManager(getApplicationContext());
+
 
         //TODO: grab the groups that the current user is already in (most recent first), and get leaders names
         //Use dummy data for now
-        Gson gson = new Gson();
-        groupList = new ArrayList<Group>();
-        List<Group> groups = gson.fromJson(session.getGroups(), new TypeToken<List<Group>>() {
-        }.getType());
-        for (Group g : groups) {
-            if (g != null) {
-                groupList.add(g);
-            }
-        }
 /**
         groupList = new ArrayList<>(Arrays.asList(new Group(1, "YummyTummies", "12345", "YummyTummies12345", "Frederick", 4),
                 new Group(2, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4), new Group(3, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4), new Group(4,"YummyTummies", "12345","YummyTummies12345", "Frederick", 4),
@@ -49,23 +48,7 @@ public class GroupSelect extends AppCompatActivity {
                 new Group(11, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4), new Group(12, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4), new Group(13, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4),
                 new Group(14, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4), new Group(15, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4), new Group(16, "YummyTummies", "12345","YummyTummies12345", "Frederick", 4)));
  **/
-        gridView = (GridView) findViewById(R.id.group_select_grid_view);
-        groupAdapter = new GroupListAdapter(this, R.layout.grid_item_group, groupList);
-        gridView.setAdapter(groupAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            Button viewGroup = (Button) findViewById(R.id.group_select_view_group_details_button);
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewGroup.setEnabled(true);
-                viewGroup.setClickable(true);
-                for (Group g : groupList)
-                    g.setSelected(false);
-                groupList.get(position).setSelected(true);
-                groupAdapter.notifyDataSetChanged();
-            }
-        });
     }
 
     @Override
@@ -114,5 +97,74 @@ public class GroupSelect extends AppCompatActivity {
 
         intent.putExtra(GROUP_ID, selectedGroup.getId());
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        Gson gson = new Gson();
+
+
+        super.onResume();
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_CREATE_GROUP, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                System.out.println(s);
+                List<Group> response = gson.fromJson(s, new TypeToken<List<Group>>() {
+                }.getType());
+                if (response.size() > 0) {
+                    session.updateGroup(gson.toJson(response));
+
+                } else {
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("That didn't work!");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userId", String.valueOf(session.getId()));
+                params.put("activity", "read");
+
+                return params;
+            }
+
+
+        };
+        queue.add(strReq);
+        groupList = new ArrayList<Group>();
+        session = new SessionManager(getApplicationContext());
+        List<Group> groups = gson.fromJson(session.getGroups(), new TypeToken<List<Group>>() {
+        }.getType());
+        System.out.println(groups.get(0).getId());
+        for (Group g : groups) {
+            if (g != null) {
+                groupList.add(g);
+            }
+        }
+        gridView = (GridView) findViewById(R.id.group_select_grid_view);
+        groupAdapter = new GroupListAdapter(this, R.layout.grid_item_group, groupList);
+        gridView.setAdapter(groupAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            Button viewGroup = (Button) findViewById(R.id.group_select_view_group_details_button);
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                viewGroup.setEnabled(true);
+                viewGroup.setClickable(true);
+                for (Group g : groupList)
+                    g.setSelected(false);
+                groupList.get(position).setSelected(true);
+                groupAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

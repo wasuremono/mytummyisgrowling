@@ -99,6 +99,7 @@ public class SessionManager {
 
     public void updateGroup(String newGroup) {
         editor.putString(userGroups, newGroup);
+        editor.commit();
 
 
     }

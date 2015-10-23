@@ -150,7 +150,7 @@ class DB_Functions {
         return $users;
     }
         public function getGroups($id){
-        $q = $this->conn->prepare("SELECT usergroups.id as id,usergroups.owner as leaderId,usergroups.groupName as name,usergroups.password as pass from usergroups JOIN groupmembers on usergroups.id = groupmembers.groupId where groupmembers.userId = ?");
+        $q = $this->conn->prepare("SELECT usergroups.id as id,usergroups.owner as leaderId,usergroups.groupName as name,usergroups.password as pass from usergroups JOIN groupmembers on usergroups.id = groupmembers.groupId where groupmembers.userId = ? ORDER BY id desc");
         $q->bind_param("s",$id);
         $q->execute();
         $groups = $q->get_result()->fetch_all($resulttype = MYSQLI_ASSOC);

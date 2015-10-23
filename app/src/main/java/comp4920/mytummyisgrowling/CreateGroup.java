@@ -167,10 +167,10 @@ public class CreateGroup extends AppCompatActivity {
                 Group response = gson.fromJson(s, Group.class);
                 if (response.getId() != 0) {
                     System.out.println("created " + response.getId());
-                    List<Group> currentList = new LinkedList<Group>();
-                    currentList = gson.fromJson(session.getGroups(), new TypeToken<List<Group>>() {
+                    List<Group> currentList = gson.fromJson(session.getGroups(), new TypeToken<List<Group>>() {
                     }.getType());
-                    currentList.add(response);
+                    currentList.add(0, response);
+                    System.out.println("Szie of " + currentList.size());
                     session.updateGroup(gson.toJson(currentList));
                     //return to MainActivity
                     AlertDialog alertDialog = new AlertDialog.Builder(CreateGroup.this).create();
@@ -197,6 +197,7 @@ public class CreateGroup extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("activity", "create");
                 params.put("userId", String.valueOf(session.getId()));
                 params.put("groupname", inputFields[0].getText().toString());
                 params.put("password", inputFields[1].getText().toString());
@@ -209,7 +210,5 @@ public class CreateGroup extends AppCompatActivity {
         queue.add(strReq);
 
 
-        Intent intent = new Intent(this, GroupSelect.class);
-        startActivity(intent);
     }
 }
