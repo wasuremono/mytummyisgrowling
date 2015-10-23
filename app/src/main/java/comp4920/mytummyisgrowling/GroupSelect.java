@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +106,7 @@ public class GroupSelect extends AppCompatActivity {
 
 
         super.onResume();
+        session = new SessionManager(getApplicationContext());
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_CREATE_GROUP, new Response.Listener<String>() {
@@ -112,10 +114,10 @@ public class GroupSelect extends AppCompatActivity {
             @Override
             public void onResponse(String s) {
                 Gson gson = new Gson();
-                System.out.println(s);
-                List<Group> response = gson.fromJson(s, new TypeToken<List<Group>>() {
+                List<Group> response = new LinkedList<Group>();
+                response = gson.fromJson(s, new TypeToken<List<Group>>() {
                 }.getType());
-                if (response.size() > 0) {
+                if (response != null && response.size() > 0) {
                     session.updateGroup(gson.toJson(response));
 
                 } else {
@@ -140,10 +142,9 @@ public class GroupSelect extends AppCompatActivity {
         };
         queue.add(strReq);
         groupList = new ArrayList<Group>();
-        session = new SessionManager(getApplicationContext());
+
         List<Group> groups = gson.fromJson(session.getGroups(), new TypeToken<List<Group>>() {
         }.getType());
-        System.out.println(groups.get(0).getId());
         for (Group g : groups) {
             if (g != null) {
                 groupList.add(g);

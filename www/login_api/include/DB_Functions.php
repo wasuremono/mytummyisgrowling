@@ -146,25 +146,44 @@ class DB_Functions {
         $q=$this->conn->prepare("SELECT userId from groupmembers where groupId = ?");
         $q->bind_param("s", $id);
         $q->execute();
-        $users = $q->get_result()->fetch_assoc();
+        $users = $q->get_result()->fetch_all($resulttype = MYSQLI_ASSOC);
         return $users;
+        
     }
         public function getGroups($id){
         $q = $this->conn->prepare("SELECT usergroups.id as id,usergroups.owner as leaderId,usergroups.groupName as name,usergroups.password as pass from usergroups JOIN groupmembers on usergroups.id = groupmembers.groupId where groupmembers.userId = ? ORDER BY id desc");
         $q->bind_param("s",$id);
         $q->execute();
         $groups = $q->get_result()->fetch_all($resulttype = MYSQLI_ASSOC);
-        foreach($groups AS $thisGroup){            
-            $members = $this->getGroupMembers($thisGroup["id"]); 
-            foreach( $members  AS $value ) {
-                $memberIds[] = $value;
+        if($groups){
+            foreach($groups AS $thisGroup){   
+                $members = $this->getGroupMembers($thisGroup["id"]); 
+                foreach( $members  AS $value ) {
+                    $memberIds[] = $value["userId"];
+                }
+            $thisGroup["memberIds"] = $memberIds;        
+            $groupList[] = $thisGroup;
             }
-        $thisGroup["memberIds"] = $memberIds;        
-        $groupList[] = $thisGroup;
-        unset($memberIds);
+            return $groupList;
         }
-        return $groupList;
     }
-}
+    public function joinGroup($gid,$password,$id){
+        $q=$this->conn->prepare("SELECT * from usergroups where id = ? AND password = ?");
+        $q->bind_param("ss",$gid,$password);
+        $q->execute();
+        $group = $q->get_result()->fetch_assoc();
+        $q->close(); 
+        if($group){
+            $q=$this->conn->prepare("SELECT * from groupmembers where groupId = ? AND id = ?");
+            $q->bind_param("ss",$gid,$id);
+            $q->execute();
+            $exists = $q->get_result()->fetch_assoc();
+            if(!$exists){
+                $this->addMember($gid,$id);
+            }
+            
+        }
+    }
+}   
  
 ?>

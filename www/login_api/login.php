@@ -21,8 +21,11 @@ if (isset($_POST['email'])){
             $response["error"] = FALSE;
             $response["uid"] = $user["id"];
             $response["email"] = $user["email"];
-            $response["prefs"] = $prefs;
-            $response["groups"] = $db->getGroups($user["id"]);
+            $response["prefs"] = $prefs;   
+            $groups = $db->getGroups($user["id"]);
+            if($groups){    
+                $response["groups"] = $groups;
+            }
             $response["errorMessage"] = "";
             #$response["user"]["created_at"] = $user["created_at"];
             #$response["user"]["updated_at"] = $user["updated_at"];
