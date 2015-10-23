@@ -162,6 +162,7 @@ class DB_Functions {
                     $memberIds[] = $value["userId"];
                 }
             $thisGroup["memberIds"] = $memberIds;        
+            unset($memberIds);
             $groupList[] = $thisGroup;
             }
             return $groupList;
@@ -174,7 +175,7 @@ class DB_Functions {
         $group = $q->get_result()->fetch_assoc();
         $q->close(); 
         if($group){
-            $q=$this->conn->prepare("SELECT * from groupmembers where groupId = ? AND id = ?");
+            $q=$this->conn->prepare("SELECT * from groupmembers where groupId = ? AND userId = ?");
             $q->bind_param("ss",$gid,$id);
             $q->execute();
             $exists = $q->get_result()->fetch_assoc();
@@ -184,6 +185,11 @@ class DB_Functions {
             
         }
     }
-}   
- 
+   public function getUserInfo($uid){
+    $q=$this->conn->prepare("SELECT name,id from users where id = ?");
+    $q->bind_param("s",$uid);
+    $q->execute();
+    return $q->get_result()->fetch_assoc();
+    }
+}
 ?>

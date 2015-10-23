@@ -16,7 +16,20 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class GroupDetails extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     public final static String GROUP_MEMBER_IDS = "comp4920.mytummyisgrowling.GROUP_MEMBER_IDS";
@@ -34,25 +47,50 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
         session = new SessionManager(getApplicationContext());
 
         Intent intent = getIntent();
-        int groupId = intent.getIntExtra(GroupSelect.GROUP_ID, -1);
-
+        String groupInfo = intent.getStringExtra(GroupSelect.GROUP_ID);
+        Gson gson = new Gson();
+        group = gson.fromJson(groupInfo, Group.class);
         //TODO: get group with groupId from database, and get all members names
         //Use dummy data for now
 
-        group = new Group(1, "YummyTummies", "12345", "YummyTummies12345", "Frederick", 4);
-        group.addMemberId(2);
-        group.addMemberId(3);
-        group.addMemberId(4);
-        group.addMemberId(5);
-        group.addMemberId(6);
-        group.addMemberId(7);
 
-        groupMemberList = new ArrayList<>();
-        GroupMember leader = new GroupMember(group.getLeaderId(), group.getLeaderName());
-        leader.setLeader(true);
-        groupMemberList.add(leader);
-        for(int memberId: group.getMemberIds()){
-            groupMemberList.add(new GroupMember(memberId, "Johnny"));
+        groupMemberList = new ArrayList<GroupMember>();
+        for (final int memberId : group.getMemberIds()) {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    AppConfig.URL_CREATE_GROUP, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String s) {
+                    Gson gson = new Gson();
+                    GroupMember response = gson.fromJson(s, GroupMember.class);
+                    if (response != null) {
+                        groupMemberList.add(response);
+
+                        if (response.getId() == group.getLeaderId()) {
+                            group.setLeaderName(response.getName());
+                        }
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("That didn't work!");
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("userId", String.valueOf(memberId));
+                    params.put("activity", "getName");
+
+                    return params;
+                }
+
+
+            };
+            queue.add(strReq);
         }
 
         TextView nameTV = (TextView) findViewById(R.id.group_details_name);
@@ -60,9 +98,9 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
         TextView passTV = (TextView) findViewById(R.id.group_details_pass);
 
         nameTV.setText(group.getName());
-        idStringTV.setText(group.getIdString());
+        idStringTV.setText(String.valueOf(group.getId()));
         passTV.setText(group.getPass());
-
+        System.out.println(groupMemberList.size());
         listView = (ListView) findViewById(R.id.group_details_members_listView);
         groupMemberAdapter = new GroupMemberListAdapter(this, R.layout.row_group_member, groupMemberList);
         listView.setAdapter(groupMemberAdapter);

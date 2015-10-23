@@ -18,6 +18,9 @@ class GroupMember {
         this.leader = false;
     }
 
+    public GroupMember() {
+
+    }
     public int getId() {
         return id;
     }
