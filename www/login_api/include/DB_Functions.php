@@ -116,10 +116,55 @@ class DB_Functions {
         $q = $this->conn->prepare("SELECT cuisine,rank from userprefs WHERE (user = ? AND cuisine != '') ORDER BY rank asc");
         $q->bind_param("s",$id);
         $q->execute();
-        $prefs = $q->get_result()->fetch_all($resulsttype = MYSQLI_ASSOC);
+        $prefs = $q->get_result()->fetch_all($resulttype = MYSQLI_ASSOC);
         return $prefs;
     }
     
+    public function createGroup($uid,$name,$password){
+        $q=$this->conn->prepare("INSERT INTO usergroups(owner,groupName,password) VALUES(?,?,?)");
+        $q->bind_param("sss",$uid,$name,$password);
+        $result = $q->execute();
+        if($result){
+            $lastInsert = $q->insert_id;
+            $q=$this->conn->prepare("SELECT * from usergroups where id = ?");
+            $q->bind_param("s",$lastInsert);
+            $q->execute();
+            $group = $q->get_result()->fetch_assoc();
+            $q->close(); 
+            return $group;
+        }
+    }
+    
+    public function addMember($groupId,$uid){
+        $q=$this->conn->prepare("INSERT INTO groupmembers(groupId,userId) VALUES(?,?)");
+        $q->bind_param("ss",$groupId,$uid);
+        $result = $q->execute();  
+        $q->close();
+        return $result;
+    }
+    public function getGroupMembers($id){
+        $q=$this->conn->prepare("SELECT userId from groupmembers where groupId = ?");
+        $q->bind_param("s", $id);
+        $q->execute();
+        $users = $q->get_result()->fetch_assoc();
+        return $users;
+    }
+        public function getGroups($id){
+        $q = $this->conn->prepare("SELECT usergroups.id as id,usergroups.owner as leaderId,usergroups.groupName as name,usergroups.password as pass from usergroups JOIN groupmembers on usergroups.id = groupmembers.groupId where groupmembers.userId = ?");
+        $q->bind_param("s",$id);
+        $q->execute();
+        $groups = $q->get_result()->fetch_all($resulttype = MYSQLI_ASSOC);
+        foreach($groups AS $thisGroup){            
+            $members = $this->getGroupMembers($thisGroup["id"]); 
+            foreach( $members  AS $value ) {
+                $memberIds[] = $value;
+            }
+        $thisGroup["memberIds"] = $memberIds;        
+        $groupList[] = $thisGroup;
+        unset($memberIds);
+        }
+        return $groupList;
+    }
 }
  
 ?>

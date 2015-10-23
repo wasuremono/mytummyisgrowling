@@ -1,5 +1,7 @@
 package comp4920.mytummyisgrowling;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,18 +15,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class CreateGroup extends AppCompatActivity {
     private EditText[] inputFields;
     private int[] inputMinLengths;
     private boolean validGroupName;
     private boolean validPassword;
-
+    SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        session = new SessionManager(getApplicationContext());
         setContentView(R.layout.activity_create_group);
         TextView t;
         t = (EditText) findViewById(R.id.create_group_enter_name);
@@ -134,6 +152,62 @@ public class CreateGroup extends AppCompatActivity {
         //TODO: add group to database
 
         //TODO: Open a dialog telling user the group id and pass, move to next intent when dialog is closed
+// Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        //mAuthTask = new UserLoginTask(email, password);
+        //mAuthTask.execute((Void) null);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_CREATE_GROUP, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                System.out.println(s);
+                Group response = gson.fromJson(s, Group.class);
+                if (response.getId() != 0) {
+                    System.out.println("created " + response.getId());
+                    List<Group> currentList = new LinkedList<Group>();
+                    currentList = gson.fromJson(session.getGroups(), new TypeToken<List<Group>>() {
+                    }.getType());
+                    currentList.add(response);
+                    session.updateGroup(gson.toJson(currentList));
+                    //return to MainActivity
+                    AlertDialog alertDialog = new AlertDialog.Builder(CreateGroup.this).create();
+                    alertDialog.setTitle("Group Created!");
+                    alertDialog.setMessage("ID: " + response.getId() + "\nPassword : " + response.getPass());
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                    alertDialog.show();
+
+                } else {
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("That didn't work!");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userId", String.valueOf(session.getId()));
+                params.put("groupname", inputFields[0].getText().toString());
+                params.put("password", inputFields[1].getText().toString());
+
+                return params;
+            }
+
+
+        };
+        queue.add(strReq);
+
 
         Intent intent = new Intent(this, GroupSelect.class);
         startActivity(intent);

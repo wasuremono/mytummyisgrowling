@@ -5,6 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Ken on 10/13/2015.
  */
@@ -24,11 +30,13 @@ public class SessionManager {
     private static final String isLogin = "isLoggedin";
     private static final String userId = "userID";
     private static final String userPrefs = "userPref";
+    private static final String userGroups = "userGroup";
     private static final String avatarPath = "userAvatar";
 
-    public void doLogin(int id, String prefs) {
+    public void doLogin(int id, String prefs, String groups) {
         editor.putBoolean(isLogin, true);
         editor.putInt(userId, id);
+        editor.putString(userGroups, groups);
         editor.putString(userPrefs, prefs);
         editor.commit();
 
@@ -83,5 +91,15 @@ public class SessionManager {
 
     public String getAvatarpath() {
         return pref.getString(avatarPath, "");
+    }
+
+    public String getGroups() {
+        return pref.getString(userGroups, "");
+    }
+
+    public void updateGroup(String newGroup) {
+        editor.putString(userGroups, newGroup);
+
+
     }
 }

@@ -15,4 +15,6 @@ public class AppConfig {
 
     // Server avatar upload url
     public static String URL_UPLOADAVATAR = "http://60.240.39.122:8080/login_api/avatar.php";
+
+    public static String URL_CREATE_GROUP = "http://60.240.39.122:8080/login_api/createGroup.php";
 }

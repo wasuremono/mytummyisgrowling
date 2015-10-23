@@ -13,11 +13,12 @@ public class LoginResponse implements Serializable{
         private int uid;
         private String email;
     private List<Preference> prefs = new ArrayList<Preference>();
+    private List<Group> groups = new ArrayList<Group>();
         private String errorMessage;
 
 
     public List<Preference> getPrefs() {
-        return (List<Preference>) prefs;
+        return prefs;
     }
         public boolean getError() {
             return error;
@@ -33,4 +34,7 @@ public class LoginResponse implements Serializable{
             return errorMessage;
         }
 
+    public List<Group> getGroups() {
+        return groups;
+    }
 }

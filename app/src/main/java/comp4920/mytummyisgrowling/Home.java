@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -180,8 +181,9 @@ public class Home extends Activity implements LoaderCallbacks<Cursor> {
                     if (!response.getError()) {
                         System.out.println("Logged in as " + response.getId());
                         List<Preference> p = response.getPrefs();
-                        session.doLogin(response.getId(), gson.toJson(p));
-                        System.out.println(session.getUserPrefs());
+                        List<Group> g = response.getGroups();
+                        session.doLogin(response.getId(), gson.toJson(p), gson.toJson(g));
+                        System.out.println(session.getGroups());
                         //return to MainActivity
                         Intent i = new Intent(getApplicationContext(), Search.class);
                         startActivity(i);
