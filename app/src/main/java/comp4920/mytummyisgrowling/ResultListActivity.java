@@ -56,6 +56,7 @@ public class ResultListActivity extends AppCompatActivity {
     private ArrayList<String> nameValues;
 
     private ArrayList<Business> businessList;
+    private ArrayList<Business> finalBusinessList;
 
     private ResultListAdapter resultListAdapter;
     private static LatLng NEWARK;
@@ -68,6 +69,14 @@ public class ResultListActivity extends AppCompatActivity {
     private ImageView detailsListStaticMapImageView;
     private ProgressDialog dialog;
 
+    // List to test that listActivity is working
+    // with intended List of String cuisine inputs
+    private ArrayList<String> testStringList = new ArrayList<String>();
+    // List of ArrayList of Businesses
+    private ArrayList<ArrayList<Business>> testListofBusinesses = new ArrayList<ArrayList<Business>>();
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +84,11 @@ public class ResultListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result_list);
         dialog = ProgressDialog.show(this, "", "Searching...", true);
 
-
+        // Add cuisines to the testStringList
+        testStringList.add("Japanese");
+        testStringList.add("Korean");
+        testStringList.add("Indian");
+        testStringList.add("Thai");
 
         // Get the message from the intent
         Intent intent = getIntent();
@@ -103,44 +116,70 @@ public class ResultListActivity extends AppCompatActivity {
 
         nameValues = new ArrayList<String>();
         businessList = new ArrayList<Business>();
+        finalBusinessList = new ArrayList<Business>();
 
-        resultListAdapter = new ResultListAdapter(businessList);
+        resultListAdapter = new ResultListAdapter(finalBusinessList);
 
         new Thread(new Runnable() {
 
             public void run() {
-                String resultBody;
-                String searchCuisine = message;
-                Gson gson = new Gson();
-                List<String> categories = Arrays.asList(searchCuisine.split(","));
-                YelpAPI yelpApi = new YelpAPI();
-               //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-                int limit = 30 / categories.size();
-                for (String category : categories) {
-                    int thisCat = 0;
-                    resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
-                    System.out.println("Result Body");
-                    System.out.println(resultBody);
-                    searchResult = resultBody;
-                    SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
-                    for (Business business : response.getBusinesses()) {
-                        boolean hasCategory = false;
-                        if (business.getCategories() != null) {
-                            for (List l : business.getCategories()) {
-                                if (l.contains(category)) hasCategory = true;
 
-                            }
+                // Get size of testStringList
+                int listSize = testStringList.size();
+                System.out.println("Size of testStringList is: " + listSize);
 
-                            if (hasCategory && (thisCat++ < limit)) {
-                                nameValues.add(business.getName());
-                                businessList.add(business);
+                // For each cuisine String in the list...
+                for(String cuisine : testStringList) {
+                    System.out.println("Cuisine: " + cuisine);
+                    // Get busList for each cuisine by Yelp search.
+                    ArrayList<Business> busList = new ArrayList<Business>();
+                    // Perform Yelp search for the cuisine
+                    String resultBody;
+                    String searchCuisine = cuisine;
+                    Gson gson = new Gson();
+                    List<String> categories = Arrays.asList(searchCuisine.split(","));
+                    YelpAPI yelpApi = new YelpAPI();
+                    //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
+                    int limit = 30 / categories.size();
+                    for (String category : categories) {
+                        int thisCat = 0;
+                        //resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
+                        resultBody = yelpApi.searchForBusinessesSetLimit(category, myLatLong, "3");
+                        searchResult = resultBody;
+                        SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
+                        for (Business business : response.getBusinesses()) {
+                            boolean hasCategory = false;
+                            if (business.getCategories() != null) {
+                                for (List l : business.getCategories()) {
+                                    if (l.contains(category)) hasCategory = true;
+                                }
+                                if (hasCategory && (thisCat++ <= limit)) {
+                                  //  nameValues.add(business.getName());
+                                    System.out.println("thisCat: "+ thisCat);
+                                    busList.add(business);
+                                  //  businessList.add(business);
+                                }
                             }
                         }
+                        // Add each cuisines businessList to the ArrayList<Business>
+                        testListofBusinesses.add(busList);
                     }
                 }
-                for(String business : nameValues) {
-                    System.out.println(business);
+
+//                for(int i=0; i < testStringList.size(); i++) {
+//                    ArrayList<Business> currList = testListofBusinesses.get(i);
+//                    System.out.println("Size of currList is: " + currList.size());
+//                }
+
+                // Alternate through the lists and add the businesses to
+                // finalBusinessList for displaying on the screen.
+                for(int j = 0; j < 3; j++) {
+                    for(int i = 0; i < testStringList.size(); i++) {
+                        ArrayList<Business> currList = testListofBusinesses.get(i);
+                        finalBusinessList.add(currList.get(j));
+                    }
                 }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -161,8 +200,8 @@ public class ResultListActivity extends AppCompatActivity {
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                                         .snippet("This is where you are.")
                         );
-                        for (int i = 0; i < businessList.size(); i++) {
-                            Business currBus = businessList.get(i);
+                        for (int i = 0; i < finalBusinessList.size(); i++) {
+                            Business currBus = finalBusinessList.get(i);
                             String currBusName = currBus.getName();
                             LatLng currBusLatLng = new LatLng(currBus.getLocation().getCoordinate().getLatitude(),
                                     currBus.getLocation().getCoordinate().getLongitude());
@@ -204,7 +243,7 @@ public class ResultListActivity extends AppCompatActivity {
                                 Intent sendBusinessList = new Intent(getResultListActivity(), MapsFromListActivity.class);
                                 sendBusinessList.putExtra("sentLatBusinessList", currLat);
                                 sendBusinessList.putExtra("sentLongBusinessList", currLong);
-                                sendBusinessList.putExtra("sentBusinessList", businessList);
+                                sendBusinessList.putExtra("sentBusinessList", finalBusinessList);
                                 startActivity(sendBusinessList);
                             }
                         });

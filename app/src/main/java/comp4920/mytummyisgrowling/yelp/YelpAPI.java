@@ -96,6 +96,14 @@ public class YelpAPI {
     return sendRequestAndGetResponse(request);
   }
 
+  public String searchForBusinessesSetLimit(String searchCuisine, String latLong, String limit) {
+    OAuthRequest request = createOAuthRequest(SEARCH_PATH);
+    request.addQuerystringParameter("term", searchCuisine + " restaurant");
+    request.addQuerystringParameter("ll", latLong);
+    request.addQuerystringParameter("limit", limit);
+    return sendRequestAndGetResponse(request);
+  }
+
   /**
    * Creates and sends a request to the Business API by business ID.
    * <p>
