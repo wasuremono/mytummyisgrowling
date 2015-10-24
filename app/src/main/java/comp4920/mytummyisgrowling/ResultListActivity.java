@@ -85,10 +85,10 @@ public class ResultListActivity extends AppCompatActivity {
         dialog = ProgressDialog.show(this, "", "Searching...", true);
 
         // Add cuisines to the testStringList
-        testStringList.add("Japanese");
-        testStringList.add("Korean");
-        testStringList.add("Indian");
         testStringList.add("Thai");
+        testStringList.add("Korean");
+        testStringList.add("kebab");
+        testStringList.add("African");
 
         // Get the message from the intent
         Intent intent = getIntent();
@@ -128,55 +128,76 @@ public class ResultListActivity extends AppCompatActivity {
                 int listSize = testStringList.size();
                 System.out.println("Size of testStringList is: " + listSize);
 
-                // For each cuisine String in the list...
-                for(String cuisine : testStringList) {
-                    System.out.println("Cuisine: " + cuisine);
-                    // Get busList for each cuisine by Yelp search.
-                    ArrayList<Business> busList = new ArrayList<Business>();
-                    // Perform Yelp search for the cuisine
+                if(listSize == 1) {
                     String resultBody;
-                    String searchCuisine = cuisine;
+                    String searchCuisine = testStringList.get(0);
                     Gson gson = new Gson();
-                    List<String> categories = Arrays.asList(searchCuisine.split(","));
+
                     YelpAPI yelpApi = new YelpAPI();
                     //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-                    int limit = 30 / categories.size();
-                    for (String category : categories) {
-                        int thisCat = 0;
-                        //resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
-                        resultBody = yelpApi.searchForBusinessesSetLimit(category, myLatLong, "3");
-                        searchResult = resultBody;
-                        SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
-                        for (Business business : response.getBusinesses()) {
-                            boolean hasCategory = false;
-                            if (business.getCategories() != null) {
-                                for (List l : business.getCategories()) {
-                                    if (l.contains(category)) hasCategory = true;
-                                }
-                                if (hasCategory && (thisCat++ <= limit)) {
-                                  //  nameValues.add(business.getName());
-                                    System.out.println("thisCat: "+ thisCat);
-                                    busList.add(business);
-                                  //  businessList.add(business);
+
+                    resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, myLatLong);
+
+                    searchResult = resultBody;
+                    SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
+                    for (Business business : response.getBusinesses()) {
+                        finalBusinessList.add(business);
+                    }
+
+                } else {
+
+                    // For each cuisine String in the list...
+                    for (String cuisine : testStringList) {
+                        System.out.println("Cuisine: " + cuisine);
+                        // Get busList for each cuisine by Yelp search.
+                        ArrayList<Business> busList = new ArrayList<Business>();
+                        // Perform Yelp search for the cuisine
+                        String resultBody;
+                        String searchCuisine = cuisine;
+                        Gson gson = new Gson();
+                        List<String> categories = Arrays.asList(searchCuisine.split(","));
+                        YelpAPI yelpApi = new YelpAPI();
+                        //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
+                        int limit = 30 / categories.size();
+                        for (String category : categories) {
+                            int thisCat = 0;
+                            //resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
+                            resultBody = yelpApi.searchForBusinessesSetLimit(category, myLatLong, "3");
+                            searchResult = resultBody;
+                            SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
+                            for (Business business : response.getBusinesses()) {
+                                boolean hasCategory = false;
+                                if (business.getCategories() != null) {
+                                    for (List l : business.getCategories()) {
+                                        if (l.contains(category)) hasCategory = true;
+                                    }
+                                    if (hasCategory && (thisCat++ <= limit)) {
+                                        //  nameValues.add(business.getName());
+                                        System.out.println("thisCat: " + thisCat);
+                                        busList.add(business);
+                                        //  businessList.add(business);
+                                    }
                                 }
                             }
+                            // Add each cuisines businessList to the ArrayList<Business>
+                            testListofBusinesses.add(busList);
                         }
-                        // Add each cuisines businessList to the ArrayList<Business>
-                        testListofBusinesses.add(busList);
                     }
-                }
 
 //                for(int i=0; i < testStringList.size(); i++) {
 //                    ArrayList<Business> currList = testListofBusinesses.get(i);
 //                    System.out.println("Size of currList is: " + currList.size());
 //                }
 
-                // Alternate through the lists and add the businesses to
-                // finalBusinessList for displaying on the screen.
-                for(int j = 0; j < 3; j++) {
-                    for(int i = 0; i < testStringList.size(); i++) {
-                        ArrayList<Business> currList = testListofBusinesses.get(i);
-                        finalBusinessList.add(currList.get(j));
+                    // Alternate through the lists and add the businesses to
+                    // finalBusinessList for displaying on the screen.
+                    for (int j = 0; j < 3; j++) {
+                        for (int i = 0; i < testStringList.size(); i++) {
+                            ArrayList<Business> currList = testListofBusinesses.get(i);
+                            if(currList.size() > 0) {
+                                finalBusinessList.add(currList.get(j));
+                            }
+                        }
                     }
                 }
 
@@ -247,81 +268,7 @@ public class ResultListActivity extends AppCompatActivity {
                                 startActivity(sendBusinessList);
                             }
                         });
-                        /**
-                         final ImageView iv = (ImageView)findViewById(R.id.resultListStaticMap);
 
-                         iv.setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
-
-                        String currLatLong = latLong;
-                        String currLatLongList[] = currLatLong.split("\\s*,\\s*");
-                        String currLat = currLatLongList[0];
-                        String currLong = currLatLongList[1];
-
-                        Intent sendBusinessList = new Intent(getResultListActivity(), MapsFromListActivity.class);
-                        sendBusinessList.putExtra("sentLatBusinessList", currLat);
-                        sendBusinessList.putExtra("sentLongBusinessList", currLong);
-                        sendBusinessList.putExtra("sentBusinessList", businessList);
-                        startActivity(sendBusinessList);
-                        }
-                        });
-
-
-                         final ViewTreeObserver vto = iv.getViewTreeObserver();
-                         vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                         public boolean onPreDraw() {
-                         finalHeight = iv.getMeasuredHeight();
-                         finalWidth = iv.getMeasuredWidth();
-
-                         //   System.out.println("current final Height in listView is: " + finalHeight);
-                         //   System.out.println("current final Wdith in listView is: " + finalWidth);
-
-                         // String link = "http://lovemeow.com/wp-content/uploads/2013/05/gLcOq-Imgur.jpg";
-
-                         detailsListStaticMapImageView = (ImageView) getResultListActivity().findViewById(R.id.resultListStaticMap);
-
-                         StringBuffer mapURLBuffer = new StringBuffer("https://maps.googleapis.com/maps/api/staticmap?center=");
-                         // Add user's last known location coordinates
-                         // as centre of map.
-                         mapURLBuffer.append(latLong);
-                         mapURLBuffer.append("&zoom=13");
-                         mapURLBuffer.append("&size=");
-                         mapURLBuffer.append(finalWidth + "x" + finalHeight);
-
-                         // %7C  =  |     (pipe)
-                         // Start adding markers of restaurants.
-                         mapURLBuffer.append("&markers=color:green%7C");
-                         mapURLBuffer.append("label:A%7C");
-                         mapURLBuffer.append(latLong);
-
-
-                         //   String listMarkers = "";
-                         //  mapURLBuffer.append("&markers=color:red");
-                         for(int i = 0; i < businessList.size(); i++) {
-                         String markerString = "&markers=color:red%7Clabel:" + i + "%7C";
-                         mapURLBuffer.append(markerString);
-                         Business currBus = businessList.get(i);
-
-                         double latitude = currBus.getLocation().getCoordinate().getLatitude();
-                         double longitude = currBus.getLocation().getCoordinate().getLongitude();
-                         String busLatLong = latitude + "," + longitude;
-                         mapURLBuffer.append(busLatLong);
-                         // markerString = markerString + busLatLong;
-                         //      System.out.println("markerString: " + markerString);
-                         //listMarkers = markerString;
-
-                         }
-
-                         //    mapURLBuffer.append(listMarkers);
-                         //     System.out.println("mapURLBuffer: " + mapURLBuffer);
-
-                         Picasso.with(getResultListActivity()).load(mapURLBuffer.toString()).into(detailsListStaticMapImageView);
-
-
-                         return true;
-                         }
-                         });
-                         **/
                     }
                 });
 
@@ -329,6 +276,7 @@ public class ResultListActivity extends AppCompatActivity {
 
 
             }
+
         }).start();
 
 
