@@ -80,27 +80,30 @@ public class YelpAPI {
    * @param location <tt>String</tt> of the location
    * @return <tt>String</tt> JSON Response
    */
-  public String searchForBusinessesByLocation(String term, String location) {
+  public String searchForBusinessesByLocation(String term, String location, String sortNum) {
     OAuthRequest request = createOAuthRequest(SEARCH_PATH);
     request.addQuerystringParameter("term", term);
     request.addQuerystringParameter("location", location);
     request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+    request.addQuerystringParameter("sort", sortNum);
     return sendRequestAndGetResponse(request);
   }
 
-  public String searchForBusinessesByLatLong(String searchCuisine, String latLong) {
+  public String searchForBusinessesByLatLong(String searchCuisine, String latLong, String sortNum) {
     OAuthRequest request = createOAuthRequest(SEARCH_PATH);
     request.addQuerystringParameter("term", searchCuisine + " restaurant");
     request.addQuerystringParameter("ll", latLong);
     request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+    request.addQuerystringParameter("sort", sortNum);
     return sendRequestAndGetResponse(request);
   }
 
-  public String searchForBusinessesSetLimit(String searchCuisine, String latLong, String limit) {
+  public String searchForBusinessesSetLimit(String searchCuisine, String latLong, String limit, String sortNum) {
     OAuthRequest request = createOAuthRequest(SEARCH_PATH);
     request.addQuerystringParameter("term", searchCuisine + " restaurant");
     request.addQuerystringParameter("ll", latLong);
     request.addQuerystringParameter("limit", limit);
+    request.addQuerystringParameter("sort", sortNum);
     return sendRequestAndGetResponse(request);
   }
 
@@ -149,9 +152,9 @@ public class YelpAPI {
    * @param yelpApi <tt>YelpAPI</tt> service instance
    * @param yelpApiCli <tt>YelpAPICLI</tt> command line arguments
    */
-  private static void queryAPI(YelpAPI yelpApi, YelpAPICLI yelpApiCli) {
+  private static void queryAPI(YelpAPI yelpApi, YelpAPICLI yelpApiCli, String sortNum) {
     String searchResponseJSON =
-        yelpApi.searchForBusinessesByLocation(yelpApiCli.term, yelpApiCli.location);
+        yelpApi.searchForBusinessesByLocation(yelpApiCli.term, yelpApiCli.location, sortNum);
 
     JSONParser parser = new JSONParser();
     JSONObject response = null;

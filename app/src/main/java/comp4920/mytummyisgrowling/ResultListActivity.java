@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import comp4920.mytummyisgrowling.yelp.YelpAPI;
 
@@ -76,7 +77,8 @@ public class ResultListActivity extends AppCompatActivity {
     // List of ArrayList of Businesses
     private ArrayList<ArrayList<Business>> testListofBusinesses = new ArrayList<ArrayList<Business>>();
 
-
+    private String sortMode;
+    private MyAppApplication myApp;
 
 
     @Override
@@ -90,6 +92,12 @@ public class ResultListActivity extends AppCompatActivity {
         testStringList.add("Korean");
         testStringList.add("kebab");
         testStringList.add("African");
+
+        // sort Mode
+        myApp = ((MyAppApplication) getApplicationContext());
+        String globalSortMode = myApp.getResultListSortMode();
+        sortMode = globalSortMode;
+
 
         // Get the message from the intent
         Intent intent = getIntent();
@@ -143,7 +151,7 @@ public class ResultListActivity extends AppCompatActivity {
                     YelpAPI yelpApi = new YelpAPI();
                     //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
                     System.out.println("Search cuisine: " + searchCuisine);
-                    resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, myLatLong);
+                    resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, myLatLong, sortMode);
 
                     searchResult = resultBody;
                     SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
@@ -169,7 +177,7 @@ public class ResultListActivity extends AppCompatActivity {
                         for (String category : categories) {
                             int thisCat = 0;
                             //resultBody = yelpApi.searchForBusinessesByLatLong(category, myLatLong);
-                            resultBody = yelpApi.searchForBusinessesSetLimit(category, myLatLong, "3");
+                            resultBody = yelpApi.searchForBusinessesSetLimit(category, myLatLong, "3", sortMode);
                             searchResult = resultBody;
                             SearchResponse response = gson.fromJson(resultBody, SearchResponse.class);
                             for (Business business : response.getBusinesses()) {
@@ -181,13 +189,13 @@ public class ResultListActivity extends AppCompatActivity {
                                     if (hasCategory && (thisCat++ <= limit)) {
                                         //  nameValues.add(business.getName());
                                         System.out.println("thisCat: " + thisCat);
-                                        busList.add(business);
-                                        //  businessList.add(business);
+                                        //busList.add(business);
+                                        finalBusinessList.add(business);
                                     }
                                 }
                             }
                             // Add each cuisines businessList to the ArrayList<Business>
-                            testListofBusinesses.add(busList);
+                            //testListofBusinesses.add(busList);
                         }
                     }
 
@@ -198,14 +206,14 @@ public class ResultListActivity extends AppCompatActivity {
 
                     // Alternate through the lists and add the businesses to
                     // finalBusinessList for displaying on the screen.
-                    for (int j = 0; j < 3; j++) {
-                        for (int i = 0; i < searchStrings.size(); i++) {
-                            ArrayList<Business> currList = testListofBusinesses.get(i);
-                            if(currList.size() > 0) {
-                                finalBusinessList.add(currList.get(j));
-                            }
-                        }
-                    }
+//                    for (int j = 0; j < 3; j++) {
+//                        for (int i = 0; i < searchStrings.size(); i++) {
+//                            ArrayList<Business> currList = testListofBusinesses.get(i);
+//                            if(currList.size() > 0) {
+//                                finalBusinessList.add(currList.get(j));
+//                            }
+//                        }
+//                    }
                 }
 
                 runOnUiThread(new Runnable() {
@@ -313,7 +321,28 @@ public class ResultListActivity extends AppCompatActivity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            case R.id.action_sort_bestMatch:
+                Toast.makeText(this, "Best match selected", Toast.LENGTH_SHORT).show();
+                myApp.setResultListSortMode("0");
+                recreate();
+                return true;
+            case R.id.action_sort_distance:
+                Toast.makeText(this, "Distance selected", Toast.LENGTH_SHORT).show();
+                myApp.setResultListSortMode("1");
+                recreate();
+                return true;
+            case R.id.action_sort_rating:
+                Toast.makeText(this, "Rating selected", Toast.LENGTH_SHORT).show();
+                myApp.setResultListSortMode("2");
+                recreate();
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     public ResultListActivity getResultListActivity() {

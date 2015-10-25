@@ -6,5 +6,20 @@
         android:id="@+id/action_Sort"
         android:title="Sort"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/action_sort_bestMatch"
+                android:title="Sort by best match"/>
+            <item
+                android:id="@+id/action_sort_distance"
+                android:title="Sort by distance"/>
+            <item
+                android:id="@+id/action_sort_rating"
+                android:title="Sort by rating"/>
+
+        </menu>
+    </item>
+
 </menu>
