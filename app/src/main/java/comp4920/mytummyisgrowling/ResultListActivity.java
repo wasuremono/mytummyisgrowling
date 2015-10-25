@@ -69,6 +69,7 @@ public class ResultListActivity extends AppCompatActivity {
     private ImageView detailsListStaticMapImageView;
     private ProgressDialog dialog;
 
+    private ArrayList<String> searchStrings;
     // List to test that listActivity is working
     // with intended List of String cuisine inputs
     private ArrayList<String> testStringList = new ArrayList<String>();
@@ -92,7 +93,13 @@ public class ResultListActivity extends AppCompatActivity {
 
         // Get the message from the intent
         Intent intent = getIntent();
-        final String message = intent.getStringExtra(ChooseLocation.EXTRA_MESSAGE);
+       /* final String message = intent.getStringExtra(ChooseLocation.SEARCH_STRINGS);*/
+        if(intent.hasExtra(ChooseLocation.SEARCH_STRINGS)){
+            searchStrings = intent.getStringArrayListExtra(ChooseLocation.SEARCH_STRINGS);
+        } else {
+            searchStrings = testStringList;
+        }
+
         final String latLong = intent.getStringExtra("currLatLong");
 
         final String myLat = intent.getStringExtra("mainMyLat");
@@ -112,7 +119,7 @@ public class ResultListActivity extends AppCompatActivity {
                         .zoom(12)
                         .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(POSITION));
-        setTitle("Results for " + message);
+        setTitle("Results");
 
         nameValues = new ArrayList<String>();
         businessList = new ArrayList<Business>();
@@ -124,18 +131,18 @@ public class ResultListActivity extends AppCompatActivity {
 
             public void run() {
 
-                // Get size of testStringList
-                int listSize = testStringList.size();
-                System.out.println("Size of testStringList is: " + listSize);
+                // Get size of searchStrings
+                int listSize = searchStrings.size();
+                System.out.println("Size of searchStrings is: " + listSize);
 
                 if(listSize == 1) {
                     String resultBody;
-                    String searchCuisine = testStringList.get(0);
+                    String searchCuisine = searchStrings.get(0);
                     Gson gson = new Gson();
 
                     YelpAPI yelpApi = new YelpAPI();
                     //  resultBody = yelpApi.searchForBusinessesByLocation(searchCuisine, "Sydney, Australia");
-
+                    System.out.println("Search cuisine: " + searchCuisine);
                     resultBody = yelpApi.searchForBusinessesByLatLong(searchCuisine, myLatLong);
 
                     searchResult = resultBody;
@@ -147,7 +154,7 @@ public class ResultListActivity extends AppCompatActivity {
                 } else {
 
                     // For each cuisine String in the list...
-                    for (String cuisine : testStringList) {
+                    for (String cuisine : searchStrings) {
                         System.out.println("Cuisine: " + cuisine);
                         // Get busList for each cuisine by Yelp search.
                         ArrayList<Business> busList = new ArrayList<Business>();
@@ -192,7 +199,7 @@ public class ResultListActivity extends AppCompatActivity {
                     // Alternate through the lists and add the businesses to
                     // finalBusinessList for displaying on the screen.
                     for (int j = 0; j < 3; j++) {
-                        for (int i = 0; i < testStringList.size(); i++) {
+                        for (int i = 0; i < searchStrings.size(); i++) {
                             ArrayList<Business> currList = testListofBusinesses.get(i);
                             if(currList.size() > 0) {
                                 finalBusinessList.add(currList.get(j));

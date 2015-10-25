@@ -32,7 +32,10 @@ public class EatingWithActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_home){
+            Intent intent = new Intent(this, Search.class);
+            startActivity(intent);
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_logout) {

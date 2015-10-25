@@ -4,14 +4,14 @@
     android:layout_height="fill_parent"
     android:background="@drawable/blurryicecream">
 
-    <Button
+    <!--<Button
         android:id="@+id/send_main"
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/searchlong"
-        android:onClick="sendMessage" />
+        android:onClick="sendMessage" />-->
 
     <TextView
         android:layout_width="wrap_content"

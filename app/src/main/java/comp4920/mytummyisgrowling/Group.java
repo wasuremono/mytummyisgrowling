@@ -28,6 +28,7 @@ class Group {
         this.leaderId = leaderId;
         this.leaderName = leaderName;
         this.memberIds = new ArrayList<>();
+        memberIds.add(leaderId);
         selected = false;
     }
 

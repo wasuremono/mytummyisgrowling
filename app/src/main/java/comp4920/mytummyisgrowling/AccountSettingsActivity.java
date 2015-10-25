@@ -50,6 +50,7 @@ public class AccountSettingsActivity extends Activity {
     private SessionManager session;
     private Bitmap thumbnail;
     private ProgressDialog dialog;
+    private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class AccountSettingsActivity extends Activity {
 
             }
         });
-        Button saveButton = (Button) findViewById(R.id.save_button);
+        saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -125,7 +126,7 @@ public class AccountSettingsActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_account_settings, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -138,7 +139,10 @@ public class AccountSettingsActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.action_logout) {
+            session.doLogout();
         }
 
         return super.onOptionsItemSelected(item);
@@ -157,6 +161,8 @@ public class AccountSettingsActivity extends Activity {
                 resize();
                 avatarView.setImageBitmap(thumbnail);
                 session.setAvatarPath(picturePath);
+                saveButton.setEnabled(true);
+                saveButton.setClickable(true);
             }
         }
     }

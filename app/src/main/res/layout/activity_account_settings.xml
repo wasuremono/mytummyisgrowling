@@ -6,18 +6,20 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/blurryicecream"
     tools:context="comp4920.mytummyisgrowling.AccountSettingsActivity">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Changes"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:id="@+id/save_button"
         android:layout_row="1"
         android:layout_column="0"
         android:layout_below="@+id/avatar_view"
-        android:layout_alignRight="@+id/avatar_view"
-        android:layout_alignEnd="@+id/avatar_view" />
+        android:background="@drawable/savebuttonselector"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:enabled="false"/>
 
     <ImageView
         android:layout_width="129dp"

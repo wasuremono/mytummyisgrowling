@@ -55,6 +55,10 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
 
 
         groupMemberList = new ArrayList<GroupMember>();
+        System.out.println("membeIds size: " + group.getMemberIds().size());
+        listView = (ListView) findViewById(R.id.group_details_members_listView);
+        groupMemberAdapter = new GroupMemberListAdapter(this, R.layout.row_group_member, groupMemberList);
+        listView.setAdapter(groupMemberAdapter);
         for (final int memberId : group.getMemberIds()) {
             RequestQueue queue = Volley.newRequestQueue(this);
             StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -65,11 +69,13 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
                     Gson gson = new Gson();
                     GroupMember response = gson.fromJson(s, GroupMember.class);
                     if (response != null) {
+                        System.out.println("Response: " + response.getName());
                         groupMemberList.add(response);
 
                         if (response.getId() == group.getLeaderId()) {
                             group.setLeaderName(response.getName());
                         }
+                        groupMemberAdapter.notifyDataSetChanged();
                     }
 
                 }
@@ -100,10 +106,8 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
         nameTV.setText(group.getName());
         idStringTV.setText(String.valueOf(group.getId()));
         passTV.setText(group.getPass());
-        System.out.println(groupMemberList.size());
-        listView = (ListView) findViewById(R.id.group_details_members_listView);
-        groupMemberAdapter = new GroupMemberListAdapter(this, R.layout.row_group_member, groupMemberList);
-        listView.setAdapter(groupMemberAdapter);
+        System.out.println("GroupMemberList size: " + groupMemberList.size());
+
 
         useGroupButton = (Button) findViewById(R.id.group_details_use_group_button);
 
@@ -132,7 +136,10 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_home){
+            Intent intent = new Intent(this, Search.class);
+            startActivity(intent);
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_logout) {

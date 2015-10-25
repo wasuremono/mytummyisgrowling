@@ -40,6 +40,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,12 +48,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ChooseLocation extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    public final static String EXTRA_MESSAGE = "comp4920.mytummyisgrowling.MESSAGE";
+    public final static String SEARCH_STRINGS = "comp4920.mytummyisgrowling.SEARCH_STRINGS";
 
     private static final String LOG_TAG = "ExampleApp";
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
@@ -70,6 +73,8 @@ public class ChooseLocation extends AppCompatActivity implements
 
     private String myLat;
     private String myLong;
+
+    private ArrayList<String> searchStrings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,30 @@ public class ChooseLocation extends AppCompatActivity implements
             }
         });
 
+        searchStrings = new ArrayList<>();
+        Intent intent = getIntent();
+        if(!intent.hasExtra(MainActivity.CHOOSE_OWN_SEARCH)){
+            EditText editText = (EditText) findViewById(R.id.mainCuisine);
+            TextView textView = (TextView) findViewById(R.id.mainCuisineTextView);
+            RelativeLayout relLayout = (RelativeLayout)editText.getParent();
+            relLayout.removeView(editText);
+            relLayout.removeView(textView);
+            if(intent.hasExtra(MainActivity.PREFERENCE_SEARCH)){
+                //GET PREFERENCES FOR CURRENT USER
+                Gson gson = new Gson();
+                List<Preference> list = gson.fromJson(session.getUserPrefs(), new TypeToken<List<Preference>>() {
+                }.getType());
+                for(Preference p: list){
+                    searchStrings.add(p.getCuisine());
+                }
+            } else {
+                if(intent.hasExtra(MainActivity.GROUP_PREFERENCE_SEARCH)){
+                    //GET PREFERENCES OF ALL GROUP MEMBERS
+                    //RUN PREFERENCE ALGORITHM
+                }
+            }
+
+        }
 
         Button mainCurrLocButton = (Button) findViewById(R.id.mainCurrLocButton);
         mainCurrLocButton.setOnClickListener(new View.OnClickListener() {
@@ -120,29 +149,36 @@ public class ChooseLocation extends AppCompatActivity implements
                 // On clicking curr location button, get the user's current location.
                 // Send the user to the Results List Activity
                 // And put the current lat and long on the intent.
-                Intent intent = new Intent(getChooseLocation(), ResultListActivity.class);
-                EditText editText = (EditText) findViewById(R.id.mainCuisine);
-                String message = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);
+
+                Intent prevIntent = getIntent();
+                if(prevIntent.hasExtra(MainActivity.CHOOSE_OWN_SEARCH)){
+                    EditText editText = (EditText) findViewById(R.id.mainCuisine);
+                    String searchTerm = editText.getText().toString();
+
+                    // Check if the user has entered a cuisine into the bar
+                    if(TextUtils.isEmpty(searchTerm)){
+                        editText.setError("Can't have an empty search.");
+                        return;
+                    } else {
+                        searchStrings.add(searchTerm);
+                    }
+                }
+                Intent nextIntent = new Intent(getChooseLocation(), ResultListActivity.class);
+
+                nextIntent.putExtra(SEARCH_STRINGS, searchStrings);
 
                 String currLatitude = String.valueOf(currentLocation.getLatitude());
                 String currLongitude = String.valueOf(currentLocation.getLongitude());
                 String currLatLong = currLatitude + "," + currLongitude;
-                intent.putExtra("currLatLong", currLatLong);
+                nextIntent.putExtra("currLatLong", currLatLong);
 
                 myLat = currLatitude;
                 myLong = currLongitude;
 
-                intent.putExtra("mainMyLat", myLat);
-                intent.putExtra("mainMyLong", myLong);
+                nextIntent.putExtra("mainMyLat", myLat);
+                nextIntent.putExtra("mainMyLong", myLong);
 
-                // Check if the user has entered a cuisine into the bar
-                if (TextUtils.isEmpty(message)) {
-                    editText.setError("Can't have an empty message.");
-                    return;
-                }
-
-                startActivity(intent);
+                startActivity(nextIntent);
 
             }
         });
@@ -155,26 +191,33 @@ public class ChooseLocation extends AppCompatActivity implements
                 // On clicking curr location button, get the user's current location.
                 // Send the user to the Results List Activity
                 // And put the current lat and long on the intent.
+                Intent prevIntent = getIntent();
+                if(prevIntent.hasExtra(MainActivity.CHOOSE_OWN_SEARCH)){
+                    EditText editText = (EditText) findViewById(R.id.mainCuisine);
+                    String searchTerm = editText.getText().toString().trim();
 
-                Intent intent = new Intent(getChooseLocation(), ResultListActivity.class);
-                EditText editText = (EditText) findViewById(R.id.mainCuisine);
-                String message = editText.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);
+                    // Check if the user has entered a cuisine into the bar
+                    if(TextUtils.isEmpty(searchTerm)){
+                        editText.setError("Can't have an empty search.");
+                        return;
+                    } else {
+                        searchStrings.add(searchTerm);
+                    }
+                }
+
+                Intent nextIntent = new Intent(getChooseLocation(), ResultListActivity.class);
+
+                nextIntent.putExtra(SEARCH_STRINGS, searchStrings);
 
                 String currLatitude = String.valueOf(currentLocation.getLatitude());
                 String currLongitude = String.valueOf(currentLocation.getLongitude());
                 String currLatLong = currLatitude + "," + currLongitude;
 
-                intent.putExtra("currLatLong", currLatLong);
+                nextIntent.putExtra("currLatLong", currLatLong);
 
-                intent.putExtra("mainMyLat", myLat);
-                intent.putExtra("mainMyLong", myLong);
+                nextIntent.putExtra("mainMyLat", myLat);
+                nextIntent.putExtra("mainMyLong", myLong);
 
-                // Check if the user has entered a cuisine into the bar
-                if (TextUtils.isEmpty(message)) {
-                    editText.setError("Can't have an empty message.");
-                    return;
-                }
                 AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.mainAutoComplete);
                 String autoCompMessage = autoCompView.getText().toString();
                 // Check if the user has entered a location.
@@ -189,7 +232,7 @@ public class ChooseLocation extends AppCompatActivity implements
                 //    return;
                 //}
 
-                startActivity(intent);
+                startActivity(nextIntent);
             }
         });
 
@@ -368,7 +411,10 @@ public class ChooseLocation extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_home){
+            Intent intent = new Intent(this, Search.class);
+            startActivity(intent);
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_logout) {
@@ -380,7 +426,7 @@ public class ChooseLocation extends AppCompatActivity implements
     /**
      * Called when the user clicks the Send button
      */
-    public void sendMessage(View view) {
+    /*public void sendMessage(View view) {
         // Do something in response to button
         Intent intent = new Intent(this, ResultListActivity.class);
         EditText editText = (EditText) findViewById(R.id.mainCuisine);
@@ -394,7 +440,7 @@ public class ChooseLocation extends AppCompatActivity implements
         intent.putExtra("currLatLong", currLatLong);
 
         //startActivity(intent);
-    }
+    }*/
 
     @Override
     public void onConnected(Bundle bundle) {
