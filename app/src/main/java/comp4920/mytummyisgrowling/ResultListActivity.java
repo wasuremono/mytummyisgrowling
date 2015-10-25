@@ -387,9 +387,9 @@ public class ResultListActivity extends AppCompatActivity {
             ImageView restaurantImage = (ImageView) convertView.findViewById(R.id.resultListImage);
             TextView restaurantName = (TextView) convertView.findViewById(R.id.resultListName);
             TextView restaurantAddress = (TextView) convertView.findViewById(R.id.resultListAddress);
-            TextView restaurantRating = (TextView) convertView.findViewById(R.id.resultListRating);
+          /*  TextView restaurantRating = (TextView) convertView.findViewById(R.id.resultListRating);
             TextView restaurantCost = (TextView) convertView.findViewById(R.id.resultListCost);
-            TextView restaurantOpen = (TextView) convertView.findViewById(R.id.resultListOpen);
+            TextView restaurantOpen = (TextView) convertView.findViewById(R.id.resultListOpen);*/
 
             Business business = businessList.get(position);
 
@@ -406,9 +406,9 @@ public class ResultListActivity extends AppCompatActivity {
             }
 
             restaurantAddress.setText(addressString);
-            restaurantRating.setText(String.valueOf(business.getRating()));
-            restaurantCost.setText("COST");
-            restaurantOpen.setText("OPEN");
+            /*restaurantRating.setText(String.valueOf(business.getRating()));
+            restaurantCost.setText("COST")
+            restaurantOpen.setText("OPEN");*/
 
             return convertView;
         }
