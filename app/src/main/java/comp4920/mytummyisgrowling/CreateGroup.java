@@ -44,18 +44,7 @@ public class CreateGroup extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
         setContentView(R.layout.activity_create_group);
-        TextView t;
-        t = (EditText) findViewById(R.id.create_group_enter_name);
-        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/palacio.ttf");
-        t.setTypeface(customFont);
-        t = (TextView) findViewById(R.id.create_group_name_hint);
-        t.setTypeface(customFont);
-        t = (EditText) findViewById(R.id.create_group_enter_pass);
-        t.setTypeface(customFont);
-        t = (TextView) findViewById(R.id.create_group_pass_hint);
-        t.setTypeface(customFont);
-        t = (EditText) findViewById(R.id.create_group_confirm_pass);
-        t.setTypeface(customFont);
+
 
         inputFields= new EditText[]{(EditText) findViewById(R.id.create_group_enter_name),
                 (EditText) findViewById(R.id.create_group_enter_pass),

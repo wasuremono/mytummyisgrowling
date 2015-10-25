@@ -45,10 +45,8 @@
             android:hint="Email"
             android:paddingTop="10dp"
             android:maxLines="1"
-            android:typeface="serif"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-        android:textStyle="bold"
            />
 
 
@@ -75,11 +73,9 @@
             android:paddingTop="40dp"
             android:gravity="fill_horizontal"
             android:hint="Password"
-            android:typeface="serif"
             android:maxLines="1"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:textStyle="bold"
 
 
             />
@@ -100,10 +96,10 @@
     <Button
             android:layout_width="300dp"
             android:layout_height="75dp"
-        android:id="@+id/loginButton"
+        android:id="@+id/loginroboto"
         android:layout_below="@+id/passwordText"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/login"
+            android:background="@drawable/loginuppercase"
         android:layout_marginTop="30dp"
             />
 

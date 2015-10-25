@@ -73,21 +73,12 @@ public class Home extends Activity implements LoaderCallbacks<Cursor> {
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.emailText);
         populateAutoComplete();
-        TextView t;
-        t = (AutoCompleteTextView) findViewById(R.id.emailText);
-        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/palacio.ttf");
-        t.setTypeface(customFont);
-        t = (EditText) findViewById(R.id.passwordText);
-        t.setTypeface(customFont);
-        t = (TextView) findViewById(R.id.registerButton);
-        t.setTypeface(customFont);
-
 
         mPasswordView = (EditText) findViewById(R.id.passwordText);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.loginButton || id == EditorInfo.IME_NULL) {
+                if (id == R.id.loginroboto || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
@@ -95,7 +86,7 @@ public class Home extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.loginButton);
+        Button mEmailSignInButton = (Button) findViewById(R.id.loginroboto);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

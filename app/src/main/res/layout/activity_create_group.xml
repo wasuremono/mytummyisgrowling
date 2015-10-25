@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
             android:clickable="false"
-            android:background="@drawable/creategroup"
+            android:background="@drawable/creategrouprobotosmall"
             android:enabled="false"
             android:onClick="createGroup"/>
     </RelativeLayout>

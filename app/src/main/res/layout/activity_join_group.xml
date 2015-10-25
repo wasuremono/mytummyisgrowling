@@ -83,7 +83,7 @@
             android:layout_height="75dp"
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/joingroup"
+            android:background="@drawable/joingrouproboto"
             android:onClick="joinGroup"/>
     </RelativeLayout>
 </LinearLayout>

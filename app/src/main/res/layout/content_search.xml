@@ -16,7 +16,7 @@
         android:layout_height="75dp"
         android:id="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/searchbypreferencenew"
+        android:background="@drawable/searchbypreferenceroboto"
         android:onClick="searchByPreference"
         />
 
@@ -27,7 +27,7 @@
         android:id="@+id/chooseOwnButton"
         android:layout_below="@+id/searchButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/choosemyownnew"
+        android:background="@drawable/choosemyownroboto"
         android:onClick="chooseMyOwn"
         />
 

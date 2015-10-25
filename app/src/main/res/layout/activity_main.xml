@@ -48,6 +48,7 @@
         android:layout_alignParentEnd="true" />
 
     <AutoCompleteTextView
+        android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/mainAutoComplete"
@@ -62,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/currentlocation"
+        android:background="@drawable/currentlocationroboto"
         android:id="@+id/mainCurrLocButton"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/mainLocationTextView"
@@ -72,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:id="@+id/mainOwnLocButton"
-        android:background="@drawable/gowithmyownlocation"
+        android:background="@drawable/ownlocationroboto"
         android:layout_below="@id/mainAutoComplete"
         android:layout_centerHorizontal="true"
  />
