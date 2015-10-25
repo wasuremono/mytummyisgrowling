@@ -32,6 +32,7 @@ if(strcmp($_POST['activity'],"create") == 0){
     }
 } else if(strcmp($_POST['activity'],"getName") == 0){
     $user = $db->getUserInfo($_POST["userId"]);
+    $user["prefs"] = $db->getPrefs($_POST["userId"]);
     echo json_encode($user);
 }
 else if(strcmp($_POST['activity'],"getPrefs") == 0){
