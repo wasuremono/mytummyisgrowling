@@ -22,8 +22,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +48,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -74,7 +84,13 @@ public class ChooseLocation extends AppCompatActivity implements
     private String myLat;
     private String myLong;
 
+    final ArrayList<List<Preference>> memberPreferences = new ArrayList<>();
     private ArrayList<String> searchStrings;
+
+
+    private HashMap<String, Integer> cuisineScores = new HashMap<>();
+    private int maxCuisines = 3;
+    private int maxRank = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +153,49 @@ public class ChooseLocation extends AppCompatActivity implements
                 if(intent.hasExtra(MainActivity.GROUP_PREFERENCE_SEARCH)){
                     //GET PREFERENCES OF ALL GROUP MEMBERS
                     //RUN PREFERENCE ALGORITHM
+                    if(intent.hasExtra(GroupDetails.GROUP_MEMBER_IDS)){
+                        ArrayList<Integer> groupMemberIds = intent.getIntegerArrayListExtra(GroupDetails.GROUP_MEMBER_IDS);
+
+                        for (final int memberId : groupMemberIds) {
+                            RequestQueue queue = Volley.newRequestQueue(this);
+                            StringRequest strReq = new StringRequest(Request.Method.POST,
+                                    AppConfig.URL_CREATE_GROUP, new Response.Listener<String>() {
+
+                                @Override
+                                public void onResponse(String s) {
+                                    Gson gson = new Gson();
+                                    System.out.println("Response string: " + s);
+                                   /* GroupMember response = gson.fromJson(s, GroupMember.class);*/
+                                    List<Preference> response = gson.fromJson(s, new TypeToken<List<Preference>>() {
+                                    }.getType());
+
+                                    if (response != null) {
+                                        System.out.println("Response preferences size: " + response.size());
+                                        memberPreferences.add(response);
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    System.out.println("That didn't work!");
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() {
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put("userId", String.valueOf(memberId));
+                                    params.put("activity", "getPrefs");
+
+                                    return params;
+                                }
+
+
+                            };
+                            queue.add(strReq);
+                        }
+                        System.out.println("MemberPreferences size: " + memberPreferences.size());
+
+                    }
                 }
             }
 
@@ -162,6 +221,8 @@ public class ChooseLocation extends AppCompatActivity implements
                     } else {
                         searchStrings.add(searchTerm);
                     }
+                } else if(prevIntent.hasExtra(MainActivity.GROUP_PREFERENCE_SEARCH)){
+                   addTopPreferences();
                 }
                 Intent nextIntent = new Intent(getChooseLocation(), ResultListActivity.class);
 
@@ -203,6 +264,8 @@ public class ChooseLocation extends AppCompatActivity implements
                     } else {
                         searchStrings.add(searchTerm);
                     }
+                } else if(prevIntent.hasExtra(MainActivity.GROUP_PREFERENCE_SEARCH)){
+                    addTopPreferences();
                 }
 
                 Intent nextIntent = new Intent(getChooseLocation(), ResultListActivity.class);
@@ -238,6 +301,42 @@ public class ChooseLocation extends AppCompatActivity implements
 
     }
 
+    private void addTopPreferences(){
+        for(List<Preference> pList : memberPreferences){
+            for(Preference p : pList){
+                String cuisine = p.getCuisine();
+                if(!cuisineScores.containsKey(cuisine)){
+                    cuisineScores.put(cuisine, 0);
+                }
+                int currentScore = cuisineScores.get(cuisine);
+                int newScore = currentScore + maxRank - p.getRank() + 1;
+                cuisineScores.put(cuisine, newScore);
+            }
+        }
+
+        //Get top Results
+        if(cuisineScores.size() > maxCuisines) {
+            for(int i=0; i < maxCuisines; i++) {
+                Map.Entry<String, Integer> maxEntry = getMaxPreferenceEntry();
+                searchStrings.add(maxEntry.getKey());
+                cuisineScores.remove(maxEntry.getKey());
+            }
+        } else {
+            for(String cuisine : cuisineScores.keySet()){
+                searchStrings.add(cuisine);
+            }
+        }
+    }
+
+    private Map.Entry<String, Integer> getMaxPreferenceEntry(){
+        Map.Entry<String, Integer> maxEntry = null;
+        for(Map.Entry<String,Integer> entry: cuisineScores.entrySet()){
+            if(maxEntry == null || entry.getValue() > maxEntry.getValue()){
+                maxEntry = entry;
+            }
+        }
+        return maxEntry;
+    }
 
     public LatLng determineLatLngFromAddress(Context appContext, String strAddress) {
         LatLng latLng = null;

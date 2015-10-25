@@ -39,13 +39,6 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
     GroupMemberListAdapter groupMemberAdapter;
     private Button useGroupButton;
     private SessionManager session;
-    private ArrayList <String> cuisines = new ArrayList <String> ();
-    private ArrayList <Integer> totals = new ArrayList <Integer> ();
-    private ArrayList <Integer> indexes = new ArrayList <Integer> ();
-    private ArrayList <String> finalstrings = new ArrayList <String> ();
-    private int index;
-    private int maxResults = 3;
-    private int maxCuisines = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,24 +76,6 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
                             group.setLeaderName(response.getName());
                         }
                         groupMemberAdapter.notifyDataSetChanged();
-
-                        // If a member preference contains a cuisine not seen yet, add it to the list
-                        // Add a 0 entry to the totals arraylist representing a new cuisine added
-                        if (!cuisines.contains (Member.cuisines)) {
-                            cuisines.add(Member.cuisine);
-                            totals.add(0);
-                        }
-
-                        // Get the index of the current cuisine being examined
-                        index = cuisines.indexOf(group.member.cuisine);
-                        // Get the current cumulative point value for that cuisine
-                        int total = totals.get(index);
-                        // Get the rank of the cuisine in question for that member
-                        // Do 10 minus rank plus 1 to get the total points to add.
-                        // eg. If rank 1, we're adding 10 points, if rank 2, we're adding 9 points to total
-                        total = total + maxCuisines - individual.getRank + 1;
-                        // Set the new value for total
-                        totals.set (index, total);
                     }
 
                 }
@@ -122,29 +97,6 @@ public class GroupDetails extends AppCompatActivity implements CompoundButton.On
 
             };
             queue.add(strReq);
-        }
-
-        int max = 0;
-
-        // Iterate through the list and find the maxresults (3) number of max ints
-        // ie. 3 largest ints.
-        // Find their indexes and put their cuisine names into the finalstrings list for passing
-        for (int i = 0; i < maxResults; i++) {
-            for (int j = 0; j < totals.size(); j++) {
-                if (totals.get(j) > max) {
-                    max = totals.get (j);
-                }
-            }
-
-            index = totals.indexOf (max);
-            indexes.add (index);
-            totals.set(index, 0);
-        }
-
-        // Final strings is a list of maxResults (3) strings
-        // representing the 3 cuisines with the highest totals
-        for (int i = 0; i < indexes.size(); i++) {
-            finalstrings.add (cuisines.get(indexes.get(i)));
         }
 
         TextView nameTV = (TextView) findViewById(R.id.group_details_name);
